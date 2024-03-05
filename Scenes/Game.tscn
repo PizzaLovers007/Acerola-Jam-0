@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dcowq5bscbq16"]
+[gd_scene load_steps=18 format=3 uid="uid://dcowq5bscbq16"]
 
 [ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
 [ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
@@ -12,12 +12,18 @@
 [ext_resource type="Script" path="res://Scripts/PostProcessing.gd" id="10_geo82"]
 [ext_resource type="Shader" path="res://Shaders/wavy.gdshader" id="10_hm5qq"]
 [ext_resource type="Shader" path="res://Shaders/dim.gdshader" id="10_l0dwx"]
+[ext_resource type="Shader" path="res://Shaders/skew.gdshader" id="13_8uihi"]
+[ext_resource type="Texture2D" uid="uid://dptw7ixoj71cx" path="res://Textures/skew.png" id="14_4ikar"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o32ba"]
 shader = ExtResource("10_hm5qq")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_go1wx"]
 shader = ExtResource("10_l0dwx")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nswmx"]
+shader = ExtResource("13_8uihi")
+shader_parameter/skew_texture = ExtResource("14_4ikar")
 
 [node name="Game" type="Node2D"]
 
@@ -86,6 +92,16 @@ visible = false
 
 [node name="ColorRect" type="ColorRect" parent="PostProcessing/Dim"]
 material = SubResource("ShaderMaterial_go1wx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Skew" type="CanvasLayer" parent="PostProcessing"]
+
+[node name="ColorRect" type="ColorRect" parent="PostProcessing/Skew"]
+material = SubResource("ShaderMaterial_nswmx")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
