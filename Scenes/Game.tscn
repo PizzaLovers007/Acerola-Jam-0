@@ -1,0 +1,93 @@
+[gd_scene load_steps=15 format=3 uid="uid://dcowq5bscbq16"]
+
+[ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
+[ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
+[ext_resource type="PackedScene" uid="uid://bygishwmk5d5j" path="res://Scenes/Objects/Column.tscn" id="2_sbt38"]
+[ext_resource type="PackedScene" uid="uid://bbuo24wyxqqay" path="res://Scenes/Objects/Player.tscn" id="3_22ywp"]
+[ext_resource type="AudioStream" uid="uid://oldf1uf558jr" path="res://Music/track.ogg" id="3_gouwi"]
+[ext_resource type="Script" path="res://Scripts/Core/Metronome.gd" id="4_1sy8f"]
+[ext_resource type="AudioStream" uid="uid://dry0sgcnoj01o" path="res://Sounds/Synth_Sine_F_hi.wav" id="5_tjxh0"]
+[ext_resource type="Script" path="res://Scripts/Attacks/ObstacleSpawner.gd" id="6_d1o53"]
+[ext_resource type="AudioStream" uid="uid://ca2a7vl6cs14f" path="res://Sounds/Synth_Sine_F_lo.wav" id="6_quvnr"]
+[ext_resource type="Script" path="res://Scripts/PostProcessing.gd" id="10_geo82"]
+[ext_resource type="Shader" path="res://Shaders/wavy.gdshader" id="10_hm5qq"]
+[ext_resource type="Shader" path="res://Shaders/dim.gdshader" id="10_l0dwx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o32ba"]
+shader = ExtResource("10_hm5qq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_go1wx"]
+shader = ExtResource("10_l0dwx")
+
+[node name="Game" type="Node2D"]
+
+[node name="System" type="Node" parent="."]
+
+[node name="GameController" type="Node" parent="System"]
+script = ExtResource("1_opfnu")
+
+[node name="Conductor" type="Node" parent="System" groups=["conductor"]]
+script = ExtResource("2_pyurn")
+
+[node name="Player" type="AudioStreamPlayer" parent="System/Conductor"]
+stream = ExtResource("3_gouwi")
+volume_db = -8.0
+
+[node name="Metronome" type="Node" parent="System"]
+script = ExtResource("4_1sy8f")
+
+[node name="HiTick" type="AudioStreamPlayer" parent="System/Metronome"]
+stream = ExtResource("5_tjxh0")
+
+[node name="LoTick" type="AudioStreamPlayer" parent="System/Metronome"]
+stream = ExtResource("6_quvnr")
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Column1" parent="Background" instance=ExtResource("2_sbt38")]
+position = Vector2(80, 480)
+
+[node name="Column2" parent="Background" instance=ExtResource("2_sbt38")]
+position = Vector2(120, 480)
+
+[node name="Column3" parent="Background" instance=ExtResource("2_sbt38")]
+position = Vector2(160, 480)
+
+[node name="Column4" parent="Background" instance=ExtResource("2_sbt38")]
+position = Vector2(200, 480)
+
+[node name="Column5" parent="Background" instance=ExtResource("2_sbt38")]
+position = Vector2(240, 480)
+
+[node name="ObstacleSpawner" type="Node" parent="."]
+script = ExtResource("6_d1o53")
+
+[node name="Player" parent="." instance=ExtResource("3_22ywp")]
+z_index = 1
+
+[node name="PostProcessing" type="Node" parent="."]
+script = ExtResource("10_geo82")
+
+[node name="Wavy" type="CanvasLayer" parent="PostProcessing"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="PostProcessing/Wavy"]
+material = SubResource("ShaderMaterial_o32ba")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="CanvasLayer" parent="PostProcessing"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="PostProcessing/Dim"]
+material = SubResource("ShaderMaterial_go1wx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
