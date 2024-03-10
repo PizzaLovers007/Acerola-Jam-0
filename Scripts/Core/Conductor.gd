@@ -1,12 +1,18 @@
 class_name Conductor
 extends Node
 
-## Emitted when a beat happens.
-signal beat_passed(beat: int)
-## Emitted when a beat is just about to happen, approximately
-## [method]AudioServer.get_output_latency()[/method] seconds before the beat.
-## Useful if some audio needs to play exactly on the beat.
-signal beat_passed_without_latency(beat: int)
+# Signals for when beats pass (4th, 8th, etc.)
+signal quarter_passed(beat: int)
+signal eighth_passed(beat: int, fract: int)
+signal twelth_passed(beat: int, fract: int)
+signal sixteenth_passed(beat: int, fract: int)
+
+# Same as above signals but AudioServer.get_output_latency() seconds earlier
+# (for beat playing)
+signal quarter_passed_without_latency(beat: int)
+signal eighth_passed_without_latency(beat: int, fract: int)
+signal twelth_passed_without_latency(beat: int, fract: int)
+signal sixteenth_passed_without_latency(beat: int, fract: int)
 
 @export var curr_beat: float = 0
 @export var curr_beat_without_latency: float = 0
@@ -62,8 +68,24 @@ func _process(delta: float) -> void:
 	curr_beat = raw_beat + loops * song_length_beats
 	
 	if floor(raw_beat) > floor(prev_raw_beat):
-		beat_passed_without_latency.emit(floor(curr_beat))
-	if floor(raw_beat - beat_latency) > floor(prev_raw_beat - beat_latency):
-		beat_passed.emit(floor(curr_beat))
+		quarter_passed_without_latency.emit(floor(curr_beat))
+	if floor(raw_beat*2) > floor(prev_raw_beat*2):
+		eighth_passed_without_latency.emit(floor(curr_beat), floor((curr_beat - floor(curr_beat)) * 2))
+	if floor(raw_beat*3) > floor(prev_raw_beat*3):
+		twelth_passed_without_latency.emit(floor(curr_beat), floor((curr_beat - floor(curr_beat)) * 3))
+	if floor(raw_beat*4) > floor(prev_raw_beat*4):
+		sixteenth_passed_without_latency.emit(floor(curr_beat), floor((curr_beat - floor(curr_beat)) * 4))
+	
+	raw_beat -= beat_latency
+	prev_raw_beat -= beat_latency
+	
+	if floor(raw_beat) > floor(prev_raw_beat):
+		quarter_passed.emit(floor(curr_beat))
+	if floor(raw_beat*2) > floor(prev_raw_beat*2):
+		eighth_passed.emit(floor(curr_beat), floor((curr_beat - floor(curr_beat)) * 2))
+	if floor(raw_beat*3) > floor(prev_raw_beat*3):
+		twelth_passed.emit(floor(curr_beat), floor((curr_beat - floor(curr_beat)) * 3))
+	if floor(raw_beat*4) > floor(prev_raw_beat*4):
+		sixteenth_passed.emit(floor(curr_beat), floor((curr_beat - floor(curr_beat)) * 4))
 	
 	prev_time_raw = time_raw

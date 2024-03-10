@@ -71,3 +71,12 @@ const PATTERNS: Array = [
 		0b11101,
 	],
 ]
+
+const MOVE_PATTERNS: Array[int] = [
+	0b11101010,
+	0b10111010,
+	0b10101110,
+	0b11011010,
+	0b01010110,
+	0b11111110,
+]

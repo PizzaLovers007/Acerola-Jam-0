@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dcowq5bscbq16"]
+[gd_scene load_steps=21 format=3 uid="uid://dcowq5bscbq16"]
 
 [ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
 [ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
@@ -6,12 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://bbuo24wyxqqay" path="res://Scenes/Objects/Player.tscn" id="3_22ywp"]
 [ext_resource type="AudioStream" uid="uid://oldf1uf558jr" path="res://Music/track.ogg" id="3_gouwi"]
 [ext_resource type="Script" path="res://Scripts/Core/Metronome.gd" id="4_1sy8f"]
-[ext_resource type="AudioStream" uid="uid://dybeehtnwfhgc" path="res://Sounds/Metronomes/Synth_Sine_F_hi.wav" id="5_lcv4c"]
+[ext_resource type="AudioStream" uid="uid://c63n5a1cirwe2" path="res://Sounds/Metronomes/Synth_Square_C_hi.wav" id="5_etcyu"]
 [ext_resource type="Script" path="res://Scripts/Attacks/ObstacleSpawner.gd" id="6_d1o53"]
-[ext_resource type="AudioStream" uid="uid://c5b78vp2ylhpn" path="res://Sounds/Metronomes/Synth_Sine_F_lo.wav" id="6_qg2yi"]
+[ext_resource type="AudioStream" uid="uid://ckjqvm86mmdar" path="res://Sounds/Metronomes/Synth_Square_C_lo.wav" id="6_um2jl"]
+[ext_resource type="AudioStream" uid="uid://bax6aeqwkaurw" path="res://Sounds/Metronomes/Synth_Square_A_hi.wav" id="7_ncv6h"]
+[ext_resource type="AudioStream" uid="uid://co1auagu64wct" path="res://Sounds/Metronomes/Perc_Stick_hi.wav" id="10_eq0ud"]
 [ext_resource type="Script" path="res://Scripts/PostProcessing.gd" id="10_geo82"]
 [ext_resource type="Shader" path="res://Shaders/wavy.gdshader" id="10_hm5qq"]
 [ext_resource type="Shader" path="res://Shaders/dim.gdshader" id="10_l0dwx"]
+[ext_resource type="AudioStream" uid="uid://c3kjwd5u3vxby" path="res://Sounds/Metronomes/Perc_Stick_lo.wav" id="11_hd8yi"]
 [ext_resource type="Shader" path="res://Shaders/skew.gdshader" id="13_8uihi"]
 [ext_resource type="Texture2D" uid="uid://dptw7ixoj71cx" path="res://Textures/skew.png" id="14_4ikar"]
 
@@ -39,14 +42,17 @@ script = ExtResource("2_pyurn")
 stream = ExtResource("3_gouwi")
 volume_db = -8.0
 
-[node name="Metronome" type="Node" parent="System"]
+[node name="Metronome" type="Node" parent="System" groups=["metronome"]]
 script = ExtResource("4_1sy8f")
 
 [node name="HiTick" type="AudioStreamPlayer" parent="System/Metronome"]
-stream = ExtResource("5_lcv4c")
+stream = ExtResource("5_etcyu")
 
 [node name="LoTick" type="AudioStreamPlayer" parent="System/Metronome"]
-stream = ExtResource("6_qg2yi")
+stream = ExtResource("6_um2jl")
+
+[node name="8thTick" type="AudioStreamPlayer" parent="System/Metronome"]
+stream = ExtResource("7_ncv6h")
 
 [node name="Background" type="Node2D" parent="."]
 
@@ -67,6 +73,14 @@ position = Vector2(480, 960)
 
 [node name="ObstacleSpawner" type="Node" parent="."]
 script = ExtResource("6_d1o53")
+
+[node name="TellTick" type="AudioStreamPlayer" parent="ObstacleSpawner"]
+stream = ExtResource("10_eq0ud")
+
+[node name="MoveTick" type="AudioStreamPlayer" parent="ObstacleSpawner"]
+stream = ExtResource("11_hd8yi")
+
+[node name="Obstacles" type="Node2D" parent="ObstacleSpawner"]
 
 [node name="Player" parent="." instance=ExtResource("3_22ywp")]
 z_index = 1
