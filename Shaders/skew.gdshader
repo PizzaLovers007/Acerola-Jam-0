@@ -14,12 +14,8 @@ void vertex() {
 void fragment() {
 	// Called for every pixel the material is visible on.
 	vec2 offset = texture(skew_texture, SCREEN_UV).rg;
-	if (offset == vec2(0., 0.)) {
-		COLOR = vec4(1.,1.,1.,1.);
-	} else {
-		vec2 uv = SCREEN_UV + (offset - 0.5) * 0.15;
-		COLOR = textureLod(screen_texture, uv, 0.0);
-	}
+	vec2 uv = SCREEN_UV + (offset - 0.5) * 0.15 * sin(TIME / 3.);
+	COLOR = textureLod(screen_texture, uv, 0.0);
 }
 
 //void light() {
