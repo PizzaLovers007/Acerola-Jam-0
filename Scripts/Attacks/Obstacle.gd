@@ -15,10 +15,11 @@ func _process(delta: float) -> void:
 		queue_free()
 
 
-func move() -> void:
-	var target_origin = transform.origin + Constants.OBSTACLE_HEIGHT * Vector2.DOWN
+func move(inverse: bool = false) -> void:
+	var move_vector = Constants.OBSTACLE_HEIGHT * Vector2.DOWN * (-1 if inverse else 1)
+	var target_origin = transform.origin + move_vector
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(self, "position", target_origin, conductor.get_beat_time() / 4)
-	tween.play()
+	tween.play() 

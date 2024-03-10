@@ -7,12 +7,14 @@ const Y_SPAWN: float = -Constants.OBSTACLE_HEIGHT
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
 @onready var obstacles_node: Node2D = $Obstacles
 @onready var tell_tick: AudioStreamPlayer = $TellTick
+@onready var tell_tick_inverse: AudioStreamPlayer = $TellTickInverse
 @onready var move_tick: AudioStreamPlayer = $MoveTick
+@onready var move_tick_inverse: AudioStreamPlayer = $MoveTickInverse
 
 var _obstacle_scene: PackedScene = preload("res://Scenes/Objects/Obstacle.tscn")
 var _next_spawn: int = 2
-var _next_pattern: Array = Constants.PATTERNS.pick_random()
-var _move_pattern: Array[bool] = [true, false, true, false, true, false, true, false]
+var _next_pattern: Array = Constants.OBSTACLE_PATTERNS.pick_random()
+var _move_pattern: Array[int] = [1,0,1,0,1,0,1,0]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -35,8 +37,8 @@ func _spawn_and_move(beat: int, fract: int) -> void:
 	match measure % 4:
 		3:
 			var half_beat_norm = beat_norm * 2 + fract
-			if _move_pattern[half_beat_norm]:
-				_tick()
+			if _move_pattern[half_beat_norm] != 0:
+				_tick(_move_pattern[half_beat_norm] == -1)
 		_:
 			if fract == 0:
 				_tick()
@@ -45,27 +47,38 @@ func _schedule_sounds(beat: int, fract: int) -> void:
 	var measure = beat / 4
 	var beat_norm = beat % 4
 	if measure % 4 == 1 and beat_norm == 0 and fract == 0:
-		var pattern = Constants.MOVE_PATTERNS.pick_random()
+		var pattern = [
+			#Constants.MOVE_PATTERNS.pick_random(),
+			#Constants.MOVE_PATTERNS.pick_random(),
+			Constants.MOVE_INVERSE_PATTERNS.pick_random()
+		].pick_random()
 		for i in range(0, 8):
-			_move_pattern[i] = (pattern & (1 << (7-i))) != 0
+			_move_pattern[i] = pattern[i]
 			
 	var half_beat_norm = beat_norm * 2 + fract
 	match measure % 4:
 		2:
-			if _move_pattern[half_beat_norm]:
+			if _move_pattern[half_beat_norm] == 1:
 				tell_tick.play()
+			elif _move_pattern[half_beat_norm] == -1:
+				tell_tick_inverse.play()
 		3:
-			if _move_pattern[half_beat_norm]:
+			if _move_pattern[half_beat_norm] == 1:
 				move_tick.play()
+			if _move_pattern[half_beat_norm] == -1:
+				move_tick_inverse.play()
 
 
-func _tick() -> void:
-	_handle_spawning()
+func _tick(inverse: bool = false) -> void:
+	_handle_spawning(inverse)
 	for obstacle in obstacles_node.get_children() as Array[Obstacle]:
-		obstacle.move()
+		obstacle.move(inverse)
 
 	
-func _handle_spawning() -> void:
+func _handle_spawning(inverse: bool = false) -> void:
+	if inverse:
+		_next_spawn += 1
+		return
 	if _next_spawn > 0:
 		_next_spawn -= 1
 		return
@@ -76,5 +89,5 @@ func _handle_spawning() -> void:
 			if (row >> (2-c)) % 2 == 1:
 				_spawn_obstacle(c, i)
 				
-	_next_pattern = Constants.PATTERNS.pick_random()
-	_next_spawn += pattern.size() + randi_range(5, 8)
+	_next_pattern = Constants.OBSTACLE_PATTERNS.pick_random()
+	_next_spawn += pattern.size() + randi_range(1, 3)

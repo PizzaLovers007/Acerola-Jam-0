@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dcowq5bscbq16"]
+[gd_scene load_steps=23 format=3 uid="uid://dcowq5bscbq16"]
 
 [ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
 [ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
@@ -14,8 +14,10 @@
 [ext_resource type="Script" path="res://Scripts/PostProcessing.gd" id="10_geo82"]
 [ext_resource type="Shader" path="res://Shaders/wavy.gdshader" id="10_hm5qq"]
 [ext_resource type="Shader" path="res://Shaders/dim.gdshader" id="10_l0dwx"]
+[ext_resource type="AudioStream" uid="uid://7dqaicwi31s4" path="res://Sounds/Metronomes/Perc_Metal_hi.wav" id="11_0egy8"]
 [ext_resource type="AudioStream" uid="uid://c3kjwd5u3vxby" path="res://Sounds/Metronomes/Perc_Stick_lo.wav" id="11_hd8yi"]
 [ext_resource type="Shader" path="res://Shaders/skew.gdshader" id="13_8uihi"]
+[ext_resource type="AudioStream" uid="uid://bc1f4yfidc5i2" path="res://Sounds/Metronomes/Perc_Metal_lo.wav" id="13_86x80"]
 [ext_resource type="Texture2D" uid="uid://dptw7ixoj71cx" path="res://Textures/skew.png" id="14_4ikar"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o32ba"]
@@ -40,19 +42,22 @@ script = ExtResource("2_pyurn")
 
 [node name="Player" type="AudioStreamPlayer" parent="System/Conductor"]
 stream = ExtResource("3_gouwi")
-volume_db = -8.0
+volume_db = -6.0
 
 [node name="Metronome" type="Node" parent="System" groups=["metronome"]]
 script = ExtResource("4_1sy8f")
 
 [node name="HiTick" type="AudioStreamPlayer" parent="System/Metronome"]
 stream = ExtResource("5_etcyu")
+volume_db = 6.0
 
 [node name="LoTick" type="AudioStreamPlayer" parent="System/Metronome"]
 stream = ExtResource("6_um2jl")
+volume_db = 6.0
 
 [node name="8thTick" type="AudioStreamPlayer" parent="System/Metronome"]
 stream = ExtResource("7_ncv6h")
+volume_db = 6.0
 
 [node name="Background" type="Node2D" parent="."]
 
@@ -76,15 +81,25 @@ script = ExtResource("6_d1o53")
 
 [node name="TellTick" type="AudioStreamPlayer" parent="ObstacleSpawner"]
 stream = ExtResource("10_eq0ud")
+volume_db = 8.0
+
+[node name="TellTickInverse" type="AudioStreamPlayer" parent="ObstacleSpawner"]
+stream = ExtResource("11_0egy8")
+volume_db = 8.0
 
 [node name="MoveTick" type="AudioStreamPlayer" parent="ObstacleSpawner"]
 stream = ExtResource("11_hd8yi")
+volume_db = 8.0
+
+[node name="MoveTickInverse" type="AudioStreamPlayer" parent="ObstacleSpawner"]
+stream = ExtResource("13_86x80")
+volume_db = 8.0
 
 [node name="Obstacles" type="Node2D" parent="ObstacleSpawner"]
 
 [node name="Player" parent="." instance=ExtResource("3_22ywp")]
 z_index = 1
-position = Vector2(320, 840)
+position = Vector2(320, 720)
 
 [node name="PostProcessing" type="Node" parent="."]
 script = ExtResource("10_geo82")
