@@ -6,9 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://bbuo24wyxqqay" path="res://Scenes/Objects/Player.tscn" id="3_22ywp"]
 [ext_resource type="AudioStream" uid="uid://oldf1uf558jr" path="res://Music/track.ogg" id="3_gouwi"]
 [ext_resource type="Script" path="res://Scripts/Core/Metronome.gd" id="4_1sy8f"]
-[ext_resource type="AudioStream" uid="uid://dry0sgcnoj01o" path="res://Sounds/Synth_Sine_F_hi.wav" id="5_tjxh0"]
+[ext_resource type="AudioStream" uid="uid://dybeehtnwfhgc" path="res://Sounds/Metronomes/Synth_Sine_F_hi.wav" id="5_lcv4c"]
 [ext_resource type="Script" path="res://Scripts/Attacks/ObstacleSpawner.gd" id="6_d1o53"]
-[ext_resource type="AudioStream" uid="uid://ca2a7vl6cs14f" path="res://Sounds/Synth_Sine_F_lo.wav" id="6_quvnr"]
+[ext_resource type="AudioStream" uid="uid://c5b78vp2ylhpn" path="res://Sounds/Metronomes/Synth_Sine_F_lo.wav" id="6_qg2yi"]
 [ext_resource type="Script" path="res://Scripts/PostProcessing.gd" id="10_geo82"]
 [ext_resource type="Shader" path="res://Shaders/wavy.gdshader" id="10_hm5qq"]
 [ext_resource type="Shader" path="res://Shaders/dim.gdshader" id="10_l0dwx"]
@@ -43,10 +43,10 @@ volume_db = -8.0
 script = ExtResource("4_1sy8f")
 
 [node name="HiTick" type="AudioStreamPlayer" parent="System/Metronome"]
-stream = ExtResource("5_tjxh0")
+stream = ExtResource("5_lcv4c")
 
 [node name="LoTick" type="AudioStreamPlayer" parent="System/Metronome"]
-stream = ExtResource("6_quvnr")
+stream = ExtResource("6_qg2yi")
 
 [node name="Background" type="Node2D" parent="."]
 
