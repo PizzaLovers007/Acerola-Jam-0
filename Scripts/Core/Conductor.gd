@@ -31,6 +31,10 @@ func play() -> void:
 	song_length_beats = round(player.stream.get_length() / 60 * bpm)
 	player.play()
 	is_playing = true
+	
+	
+func get_beat_time() -> float:
+	return 60 / bpm
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

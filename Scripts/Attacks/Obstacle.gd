@@ -1,6 +1,8 @@
 class_name Obstacle
 extends Node2D
 
+@onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -14,4 +16,9 @@ func _process(delta: float) -> void:
 
 
 func move() -> void:
-	transform.origin.y += Constants.OBSTACLE_HEIGHT
+	var target_origin = transform.origin + Constants.OBSTACLE_HEIGHT * Vector2.DOWN
+	var tween = get_tree().create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUINT)
+	tween.tween_property(self, "position", target_origin, conductor.get_beat_time() / 4)
+	tween.play()
