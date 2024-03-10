@@ -42,7 +42,7 @@ const OBSTACLE_PATTERNS: Array = [
 		0b10111,
 		0b11011,
 		0b11011,
-		0b10111,
+		0b11101,
 		0b11011,
 		0b11011,
 		0b10111,

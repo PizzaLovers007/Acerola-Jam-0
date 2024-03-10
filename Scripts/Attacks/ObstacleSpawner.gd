@@ -6,12 +6,16 @@ const Y_SPAWN: float = -Constants.OBSTACLE_HEIGHT
 @export var spawning: bool = false
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
 @onready var obstacles_node: Node2D = $Obstacles
+@onready var tell_sprites_node: Node2D = $TellSprites
 @onready var tell_tick: AudioStreamPlayer = $TellTick
 @onready var tell_tick_inverse: AudioStreamPlayer = $TellTickInverse
 @onready var move_tick: AudioStreamPlayer = $MoveTick
 @onready var move_tick_inverse: AudioStreamPlayer = $MoveTickInverse
 
 var _obstacle_scene: PackedScene = preload("res://Scenes/Objects/Obstacle.tscn")
+var _down_arrow_img: CompressedTexture2D = preload("res://Sprites/down_arrow.png")
+var _up_arrow_img: CompressedTexture2D = preload("res://Sprites/up_arrow.png")
+var _dot_img: CompressedTexture2D = preload("res://Sprites/dot.png")
 var _next_spawn: int = 2
 var _next_pattern: Array = Constants.OBSTACLE_PATTERNS.pick_random()
 var _move_pattern: Array[int] = [1,0,1,0,1,0,1,0]
@@ -48,25 +52,31 @@ func _schedule_sounds(beat: int, fract: int) -> void:
 	var beat_norm = beat % 4
 	if measure % 4 == 1 and beat_norm == 0 and fract == 0:
 		var pattern = [
-			#Constants.MOVE_PATTERNS.pick_random(),
-			#Constants.MOVE_PATTERNS.pick_random(),
+			Constants.MOVE_PATTERNS.pick_random(),
+			Constants.MOVE_PATTERNS.pick_random(),
 			Constants.MOVE_INVERSE_PATTERNS.pick_random()
 		].pick_random()
 		for i in range(0, 8):
 			_move_pattern[i] = pattern[i]
 			
 	var half_beat_norm = beat_norm * 2 + fract
+	var tell_sprite = tell_sprites_node.get_child(half_beat_norm) as Sprite2D
 	match measure % 4:
 		2:
 			if _move_pattern[half_beat_norm] == 1:
 				tell_tick.play()
+				tell_sprite.texture = _down_arrow_img
 			elif _move_pattern[half_beat_norm] == -1:
 				tell_tick_inverse.play()
+				tell_sprite.texture = _up_arrow_img
 		3:
 			if _move_pattern[half_beat_norm] == 1:
 				move_tick.play()
 			if _move_pattern[half_beat_norm] == -1:
 				move_tick_inverse.play()
+	if measure % 4 == 0 and half_beat_norm == 0:
+		for child in tell_sprites_node.get_children() as Array[Sprite2D]:
+			child.texture = _dot_img
 
 
 func _tick(inverse: bool = false) -> void:

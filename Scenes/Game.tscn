@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dcowq5bscbq16"]
+[gd_scene load_steps=24 format=3 uid="uid://dcowq5bscbq16"]
 
 [ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
 [ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
@@ -19,6 +19,7 @@
 [ext_resource type="Shader" path="res://Shaders/skew.gdshader" id="13_8uihi"]
 [ext_resource type="AudioStream" uid="uid://bc1f4yfidc5i2" path="res://Sounds/Metronomes/Perc_Metal_lo.wav" id="13_86x80"]
 [ext_resource type="Texture2D" uid="uid://dptw7ixoj71cx" path="res://Textures/skew.png" id="14_4ikar"]
+[ext_resource type="Texture2D" uid="uid://xaqv06mtanp8" path="res://Sprites/dot.png" id="14_ygw7s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o32ba"]
 shader = ExtResource("10_hm5qq")
@@ -94,6 +95,48 @@ volume_db = 8.0
 [node name="MoveTickInverse" type="AudioStreamPlayer" parent="ObstacleSpawner"]
 stream = ExtResource("13_86x80")
 volume_db = 8.0
+
+[node name="TellSprites" type="Node2D" parent="ObstacleSpawner"]
+
+[node name="Beat0Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
+position = Vector2(60, 114)
+scale = Vector2(2, 2)
+texture = ExtResource("14_ygw7s")
+
+[node name="Beat1Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
+position = Vector2(60, 214)
+scale = Vector2(2, 2)
+texture = ExtResource("14_ygw7s")
+
+[node name="Beat2Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
+position = Vector2(60, 314)
+scale = Vector2(2, 2)
+texture = ExtResource("14_ygw7s")
+
+[node name="Beat3Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
+position = Vector2(60, 414)
+scale = Vector2(2, 2)
+texture = ExtResource("14_ygw7s")
+
+[node name="Beat4Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
+position = Vector2(60, 514)
+scale = Vector2(2, 2)
+texture = ExtResource("14_ygw7s")
+
+[node name="Beat5Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
+position = Vector2(60, 614)
+scale = Vector2(2, 2)
+texture = ExtResource("14_ygw7s")
+
+[node name="Beat6Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
+position = Vector2(60, 714)
+scale = Vector2(2, 2)
+texture = ExtResource("14_ygw7s")
+
+[node name="Beat7Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
+position = Vector2(60, 814)
+scale = Vector2(2, 2)
+texture = ExtResource("14_ygw7s")
 
 [node name="Obstacles" type="Node2D" parent="ObstacleSpawner"]
 
