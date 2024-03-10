@@ -4,12 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://cc3hme0ek1ptk" path="res://Sprites/obstacle.png" id="1_wer6g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6h7ue"]
-size = Vector2(40, 60)
+size = Vector2(80, 120)
 
 [node name="Obstacle" type="Area2D" groups=["obstacle"]]
 script = ExtResource("1_0jqc0")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
 texture = ExtResource("1_wer6g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

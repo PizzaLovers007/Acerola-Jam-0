@@ -1,7 +1,7 @@
 class_name ObstacleSpawner
 extends Node
 
-const Y_SPAWN: float = -30
+const Y_SPAWN: float = -Constants.OBSTACLE_HEIGHT
 
 @export var spawning: bool = false
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
@@ -19,7 +19,7 @@ func _ready() -> void:
 func _spawn_obstacle(column: int, y_offset: int) -> void:
 	var obstacle: Obstacle = _obstacle_scene.instantiate()
 	obstacle.transform.origin.y = Y_SPAWN - y_offset * Constants.OBSTACLE_HEIGHT
-	obstacle.transform.origin.x = 160 + column * Constants.COLUMN_WIDTH
+	obstacle.transform.origin.x = Constants.MIDDLE_X + column * Constants.COLUMN_WIDTH
 	add_child(obstacle)
 
 

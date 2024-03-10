@@ -51,25 +51,26 @@ stream = ExtResource("6_qg2yi")
 [node name="Background" type="Node2D" parent="."]
 
 [node name="Column1" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(80, 480)
+position = Vector2(160, 960)
 
 [node name="Column2" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(120, 480)
+position = Vector2(240, 960)
 
 [node name="Column3" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(160, 480)
+position = Vector2(320, 960)
 
 [node name="Column4" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(200, 480)
+position = Vector2(400, 960)
 
 [node name="Column5" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(240, 480)
+position = Vector2(480, 960)
 
 [node name="ObstacleSpawner" type="Node" parent="."]
 script = ExtResource("6_d1o53")
 
 [node name="Player" parent="." instance=ExtResource("3_22ywp")]
 z_index = 1
+position = Vector2(320, 840)
 
 [node name="PostProcessing" type="Node" parent="."]
 script = ExtResource("10_geo82")
@@ -99,6 +100,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Skew" type="CanvasLayer" parent="PostProcessing"]
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="PostProcessing/Skew"]
 material = SubResource("ShaderMaterial_nswmx")

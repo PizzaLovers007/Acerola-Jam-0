@@ -8,7 +8,7 @@ extends Node2D
 	set(value):
 		if value >= -2 and value <= 2:
 			column = value
-			transform.origin.x = 160 + value * Constants.COLUMN_WIDTH
+			transform.origin.x = Constants.MIDDLE_X + value * Constants.COLUMN_WIDTH
 			
 @export var is_controllable: bool = true
 @export var invuln_time: float = 0:
