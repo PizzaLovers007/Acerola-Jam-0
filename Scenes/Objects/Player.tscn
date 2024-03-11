@@ -1,32 +1,34 @@
 [gd_scene load_steps=6 format=3 uid="uid://bbuo24wyxqqay"]
 
 [ext_resource type="Texture2D" uid="uid://dmwh22s5lp4bn" path="res://Sprites/player_ship.png" id="1_uvvdc"]
-[ext_resource type="Script" path="res://Scripts/Player/PlayerState.gd" id="3_khl6i"]
 [ext_resource type="AudioStream" uid="uid://cbyb75imslw3t" path="res://Sounds/Hit_Hurt.wav" id="4_0gb6e"]
-[ext_resource type="Script" path="res://Scripts/Player/PlayerControl.gd" id="4_rcthe"]
+[ext_resource type="AudioStream" uid="uid://dwym8a4nu4bc" path="res://Sounds/Hit_Dead.wav" id="4_qv5wy"]
+[ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="4_rcthe"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s84js"]
-size = Vector2(44, 50)
+[sub_resource type="CircleShape2D" id="CircleShape2D_0xy4d"]
 
 [node name="Player" type="Node2D" groups=["player"]]
-script = ExtResource("3_khl6i")
+script = ExtResource("4_rcthe")
 
 [node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(0, -2)
 scale = Vector2(2, 2)
 texture = ExtResource("1_uvvdc")
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(0, 1)
-shape = SubResource("RectangleShape2D_s84js")
-
-[node name="PlayerControl" type="Node" parent="."]
-script = ExtResource("4_rcthe")
+position = Vector2(0, 2.38419e-07)
+scale = Vector2(1e-05, 1e-05)
+shape = SubResource("CircleShape2D_0xy4d")
 
 [node name="HitPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_0gb6e")
 volume_db = -4.0
 
-[connection signal="area_entered" from="Area2D" to="PlayerControl" method="_on_area_2d_area_entered"]
-[connection signal="area_exited" from="Area2D" to="PlayerControl" method="_on_area_2d_area_exited"]
+[node name="KillPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_qv5wy")
+volume_db = -4.0
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]

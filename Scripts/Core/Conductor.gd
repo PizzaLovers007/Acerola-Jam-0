@@ -37,7 +37,12 @@ func play() -> void:
 	song_length_beats = round(player.stream.get_length() / 60 * bpm)
 	player.play()
 	is_playing = true
-	
+
+
+func stop() -> void:
+	player.stop()
+	is_playing = false
+
 	
 func get_beat_time() -> float:
 	return 60 / bpm
@@ -56,7 +61,7 @@ func _process(delta: float) -> void:
 	if time_raw < prev_time_raw:
 		if prev_time_raw - time_raw < 0.1:
 			return
-		print("big reverse: ", prev_time_raw - time_raw)
+		print("big reverse: prev=", prev_time_raw, " curr=", time_raw, " delta=", prev_time_raw - time_raw)
 		loops += 1
 		prev_time_raw -= song_length_beats / bpm * 60
 	
