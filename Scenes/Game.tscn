@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dcowq5bscbq16"]
+[gd_scene load_steps=25 format=3 uid="uid://dcowq5bscbq16"]
 
 [ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
 [ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
@@ -20,6 +20,7 @@
 [ext_resource type="AudioStream" uid="uid://bc1f4yfidc5i2" path="res://Sounds/Metronomes/Perc_Metal_lo.wav" id="13_86x80"]
 [ext_resource type="Texture2D" uid="uid://dptw7ixoj71cx" path="res://Textures/skew.png" id="14_4ikar"]
 [ext_resource type="Texture2D" uid="uid://xaqv06mtanp8" path="res://Sprites/dot.png" id="14_ygw7s"]
+[ext_resource type="Texture2D" uid="uid://cn1eqtbq36fvo" path="res://Sprites/heart.png" id="16_we20a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o32ba"]
 shader = ExtResource("10_hm5qq")
@@ -143,6 +144,23 @@ texture = ExtResource("14_ygw7s")
 [node name="Player" parent="." instance=ExtResource("3_22ywp")]
 z_index = 1
 position = Vector2(320, 720)
+
+[node name="Lives" type="Node2D" parent="." groups=["lives"]]
+position = Vector2(580, 900)
+
+[node name="Heart1" type="Sprite2D" parent="Lives"]
+scale = Vector2(2, 2)
+texture = ExtResource("16_we20a")
+
+[node name="Heart2" type="Sprite2D" parent="Lives"]
+position = Vector2(0, -80)
+scale = Vector2(2, 2)
+texture = ExtResource("16_we20a")
+
+[node name="Heart3" type="Sprite2D" parent="Lives"]
+position = Vector2(0, -160)
+scale = Vector2(2, 2)
+texture = ExtResource("16_we20a")
 
 [node name="PostProcessing" type="Node" parent="."]
 script = ExtResource("10_geo82")

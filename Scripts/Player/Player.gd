@@ -3,6 +3,7 @@ extends Node2D
 
 const COYOTE_TIME_MS = 80
 
+signal player_damaged
 signal player_died
 
 @onready var hit_player: AudioStreamPlayer = $HitPlayer
@@ -10,7 +11,7 @@ signal player_died
 @onready var sprite: Sprite2D = get_node("Sprite")
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
 
-@export var health: int = 1
+@export var health: int = 3
 @export var column: int = 0
 @export var is_controllable: bool = true
 @export var invuln_time: float = 0
@@ -40,6 +41,7 @@ func _process_damage() -> void:
 		return
 	if _inside_count > 0 and Time.get_ticks_usec() - _entered_obstacle_us > COYOTE_TIME_MS * 1000:
 		health -= 1
+		player_damaged.emit()
 		if health > 0:
 			hit_player.play()
 			invuln_time = 4
