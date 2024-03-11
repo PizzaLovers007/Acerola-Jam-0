@@ -2,7 +2,7 @@ class_name Obstacle
 extends Node2D
 
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
-
+@onready var sprite: Sprite2D = $Sprite2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -16,6 +16,8 @@ func _process(delta: float) -> void:
 
 
 func move(inverse: bool = false) -> void:
+	sprite.flip_v = inverse
+	sprite.flip_h = not sprite.flip_h
 	var move_vector = Constants.OBSTACLE_HEIGHT * Vector2.DOWN * (-1 if inverse else 1)
 	var target_origin = transform.origin + move_vector
 	var tween = get_tree().create_tween()

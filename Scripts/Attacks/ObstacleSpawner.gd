@@ -7,6 +7,7 @@ const Y_SPAWN: float = -Constants.OBSTACLE_HEIGHT
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
 @onready var obstacles_node: Node2D = $Obstacles
 @onready var tell_sprites_node: Node2D = $TellSprites
+@onready var captain_node: Captain = get_tree().get_first_node_in_group("captain")
 @onready var tell_tick: AudioStreamPlayer = $TellTick
 @onready var tell_tick_inverse: AudioStreamPlayer = $TellTickInverse
 @onready var move_tick: AudioStreamPlayer = $MoveTick
@@ -46,6 +47,9 @@ func _spawn_and_move(beat: int, fract: int) -> void:
 		_:
 			if fract == 0:
 				_tick()
+	
+	if fract == 0 and measure / 2 % 2 == 0:
+		captain_node.idle()
 
 func _schedule_sounds(beat: int, fract: int) -> void:
 	var measure = beat / 4
@@ -66,14 +70,18 @@ func _schedule_sounds(beat: int, fract: int) -> void:
 			if _move_pattern[half_beat_norm] == 1:
 				tell_tick.play()
 				tell_sprite.texture = _down_arrow_img
+				captain_node.whistle(false)
 			elif _move_pattern[half_beat_norm] == -1:
 				tell_tick_inverse.play()
 				tell_sprite.texture = _up_arrow_img
+				captain_node.whistle(true)
 		3:
 			if _move_pattern[half_beat_norm] == 1:
 				move_tick.play()
+				captain_node.idle()
 			if _move_pattern[half_beat_norm] == -1:
 				move_tick_inverse.play()
+				captain_node.idle()
 	if measure % 4 == 0 and half_beat_norm == 0:
 		for child in tell_sprites_node.get_children() as Array[Sprite2D]:
 			child.texture = _dot_img

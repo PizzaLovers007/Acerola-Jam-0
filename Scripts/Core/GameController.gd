@@ -3,7 +3,7 @@ extends Node
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
-@onready var game_over_text: RichTextLabel = get_tree().get_first_node_in_group("gui").get_node("GameOver")
+@onready var game_over_node: Node = get_tree().get_first_node_in_group("gui")
 @onready var lives_node: Node2D = get_tree().get_first_node_in_group("lives")
 
 var has_started: bool = false
@@ -20,7 +20,7 @@ func _ready() -> void:
 func _on_player_died() -> void:
 	conductor.stop()
 	curr_state = GameState.DEAD
-	game_over_text.visible = true
+	game_over_node.visible = true
 
 
 func _on_player_damaged() -> void:
