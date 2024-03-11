@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://Scripts/Attacks/Obstacle.gd" id="1_0jqc0"]
 [ext_resource type="Texture2D" uid="uid://cc3hme0ek1ptk" path="res://Sprites/obstacle.png" id="1_wer6g"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6h7ue"]
-size = Vector2(80, 120)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rrjju"]
+height = 56.0
 
 [node name="Obstacle" type="Area2D" groups=["obstacle"]]
 script = ExtResource("1_0jqc0")
@@ -14,4 +14,5 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_wer6g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_6h7ue")
+position = Vector2(0, -2)
+shape = SubResource("CapsuleShape2D_rrjju")
