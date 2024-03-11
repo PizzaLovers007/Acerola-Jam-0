@@ -100,4 +100,4 @@ func _handle_spawning(inverse: bool = false) -> void:
 				_spawn_obstacle(c, i)
 				
 	_next_pattern = Constants.OBSTACLE_PATTERNS.pick_random()
-	_next_spawn += pattern.size() + randi_range(1, 3)
+	_next_spawn += pattern.size() + randi_range(0, 2)
