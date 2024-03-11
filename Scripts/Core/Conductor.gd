@@ -57,6 +57,10 @@ func _process(delta: float) -> void:
 			player.get_playback_position()
 			+ AudioServer.get_time_since_last_mix())
 	
+	# Web occasionally has a big number here, so ignore these frames
+	if time_raw > 1000:
+		return
+	
 	# Skip processing jitters, but not loops
 	if time_raw < prev_time_raw:
 		if prev_time_raw - time_raw < 0.1:
