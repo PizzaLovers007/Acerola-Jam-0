@@ -1,8 +1,9 @@
 class_name Obstacle
-extends Node2D
+extends Area2D
 
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var anger_sprite: Sprite2D = $AngerSprite
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -25,3 +26,8 @@ func move(inverse: bool = false) -> void:
 	tween.set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(self, "position", target_origin, conductor.get_beat_time() / 4)
 	tween.play() 
+
+
+func show_angry() -> void:
+	anger_sprite.visible = true
+	sprite.modulate = Color.ORANGE_RED

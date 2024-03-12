@@ -18,12 +18,10 @@ func _process(delta: float) -> void:
 
 
 func idle() -> void:
-	sprite.flip_v = false
 	sprite.flip_h = not sprite.flip_h
 	sprite.texture = _idle_img
 
 
 func whistle(inverse: bool) -> void:
-	sprite.flip_v = inverse
-	sprite.flip_h = not sprite.flip_h
+	sprite.flip_h = not inverse
 	sprite.texture = _whistle_img

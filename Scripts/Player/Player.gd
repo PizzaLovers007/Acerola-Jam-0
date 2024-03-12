@@ -1,7 +1,7 @@
 class_name Player
 extends Node2D
 
-const COYOTE_TIME_MS = 80
+const COYOTE_TIME_MS = 40
 
 signal player_damaged
 signal player_died
@@ -11,12 +11,12 @@ signal player_died
 @onready var sprite: Sprite2D = get_node("Sprite")
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
 
-@export var health: int = 3
+@export var health: int = 1
 @export var column: int = 0
 @export var is_controllable: bool = true
 @export var invuln_time: float = 0
 
-var _inside_count: int = 0
+var _obstacle_inside: Obstacle = null
 var _entered_obstacle_us: int = 0
 var _move_tween: Tween = null
 
@@ -39,8 +39,9 @@ func _process(delta: float) -> void:
 func _process_damage() -> void:
 	if invuln_time > 0:
 		return
-	if _inside_count > 0 and Time.get_ticks_usec() - _entered_obstacle_us > COYOTE_TIME_MS * 1000:
+	if _obstacle_inside != null and Time.get_ticks_usec() - _entered_obstacle_us > COYOTE_TIME_MS * 1000:
 		health -= 1
+		_obstacle_inside.show_angry()
 		player_damaged.emit()
 		if health > 0:
 			hit_player.play()
@@ -75,7 +76,7 @@ func _process_inputs() -> void:
 	_move_tween = get_tree().create_tween()
 	_move_tween.set_ease(Tween.EASE_OUT)
 	_move_tween.set_trans(Tween.TRANS_QUINT)
-	_move_tween.tween_property(self, "position:x", target_x, conductor.get_beat_time() / 6)
+	_move_tween.tween_property(self, "position:x", target_x, conductor.get_beat_time() / 4)
 	_move_tween.tween_callback(func(): _move_tween = null)
 	_move_tween.play()
 
@@ -83,9 +84,8 @@ func _process_inputs() -> void:
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("obstacle"):
 		return
-	if _inside_count == 0:
-		_entered_obstacle_us = Time.get_ticks_usec()
-	_inside_count += 1
+	_entered_obstacle_us = Time.get_ticks_usec()
+	_obstacle_inside = area as Obstacle
 
 
 func _on_area_2d_area_exited(area: Area2D) -> void:
@@ -93,6 +93,5 @@ func _on_area_2d_area_exited(area: Area2D) -> void:
 		return
 	if Time.get_ticks_usec() - _entered_obstacle_us <= COYOTE_TIME_MS * 1000:
 		print("coyoted! ", (Time.get_ticks_usec() - _entered_obstacle_us) / 1000.0, "ms")
-	_inside_count -= 1
-	if _inside_count == 0:
-		_entered_obstacle_us = 0
+	_obstacle_inside = null
+	_entered_obstacle_us = 0

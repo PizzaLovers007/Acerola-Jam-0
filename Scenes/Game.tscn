@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dcowq5bscbq16"]
+[gd_scene load_steps=26 format=3 uid="uid://dcowq5bscbq16"]
 
 [ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
 [ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
@@ -11,20 +11,17 @@
 [ext_resource type="AudioStream" uid="uid://ckjqvm86mmdar" path="res://Sounds/Metronomes/Synth_Square_C_lo.wav" id="6_um2jl"]
 [ext_resource type="AudioStream" uid="uid://bax6aeqwkaurw" path="res://Sounds/Metronomes/Synth_Square_A_hi.wav" id="7_ncv6h"]
 [ext_resource type="Texture2D" uid="uid://bfcbabvpni40r" path="res://Sprites/bg.png" id="8_fxxum"]
-[ext_resource type="Texture2D" uid="uid://ddrralqikc2wy" path="res://Sprites/column.png" id="9_2m6i5"]
-[ext_resource type="Script" path="res://Scripts/Attacks/Captain.gd" id="9_yr6wc"]
 [ext_resource type="AudioStream" uid="uid://co1auagu64wct" path="res://Sounds/Metronomes/Perc_Stick_hi.wav" id="10_eq0ud"]
 [ext_resource type="Script" path="res://Scripts/PostProcessing.gd" id="10_geo82"]
 [ext_resource type="Shader" path="res://Shaders/wavy.gdshader" id="10_hm5qq"]
 [ext_resource type="Shader" path="res://Shaders/dim.gdshader" id="10_l0dwx"]
+[ext_resource type="PackedScene" uid="uid://dwcks3ags7vri" path="res://Scenes/Objects/Captain.tscn" id="10_npas6"]
 [ext_resource type="AudioStream" uid="uid://7dqaicwi31s4" path="res://Sounds/Metronomes/Perc_Metal_hi.wav" id="11_0egy8"]
 [ext_resource type="AudioStream" uid="uid://c3kjwd5u3vxby" path="res://Sounds/Metronomes/Perc_Stick_lo.wav" id="11_hd8yi"]
-[ext_resource type="Texture2D" uid="uid://c3e85toymp0lr" path="res://Sprites/captain_idle.png" id="11_ve41a"]
 [ext_resource type="Shader" path="res://Shaders/skew.gdshader" id="13_8uihi"]
 [ext_resource type="AudioStream" uid="uid://bc1f4yfidc5i2" path="res://Sounds/Metronomes/Perc_Metal_lo.wav" id="13_86x80"]
 [ext_resource type="Texture2D" uid="uid://dptw7ixoj71cx" path="res://Textures/skew.png" id="14_4ikar"]
 [ext_resource type="Texture2D" uid="uid://xaqv06mtanp8" path="res://Sprites/dot.png" id="14_ygw7s"]
-[ext_resource type="Texture2D" uid="uid://cn1eqtbq36fvo" path="res://Sprites/heart.png" id="16_we20a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o32ba"]
 shader = ExtResource("10_hm5qq")
@@ -74,33 +71,46 @@ offset_bottom = 960.0
 texture = ExtResource("8_fxxum")
 stretch_mode = 1
 
-[node name="Column1" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(160, 1010.72)
-
 [node name="Column2" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(240, 1055.04)
+position = Vector2(260, 1055.04)
 
 [node name="Column3" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(320, 968.62)
+position = Vector2(340, 968.62)
 
 [node name="Column4" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(400, 1032.39)
+position = Vector2(420, 1032.39)
 
 [node name="Column5" parent="Background" instance=ExtResource("2_sbt38")]
-position = Vector2(480, 1068.83)
+position = Vector2(500, 1068.83)
 
-[node name="Captain" type="Node2D" parent="." groups=["captain"]]
-position = Vector2(60, 74)
-script = ExtResource("9_yr6wc")
+[node name="Column6" parent="Background" instance=ExtResource("2_sbt38")]
+position = Vector2(580, 1010.72)
 
-[node name="Column" type="Sprite2D" parent="Captain"]
-position = Vector2(0, -24)
-scale = Vector2(2, 2)
-texture = ExtResource("9_2m6i5")
+[node name="Captains" type="Node2D" parent="." groups=["captains"]]
 
-[node name="Sprite2D" type="Sprite2D" parent="Captain"]
-scale = Vector2(2, 2)
-texture = ExtResource("11_ve41a")
+[node name="Captain1" parent="Captains" instance=ExtResource("10_npas6")]
+position = Vector2(54, 128)
+
+[node name="Captain2" parent="Captains" instance=ExtResource("10_npas6")]
+position = Vector2(54, 228)
+
+[node name="Captain3" parent="Captains" instance=ExtResource("10_npas6")]
+position = Vector2(54, 328)
+
+[node name="Captain4" parent="Captains" instance=ExtResource("10_npas6")]
+position = Vector2(54, 428)
+
+[node name="Captain5" parent="Captains" instance=ExtResource("10_npas6")]
+position = Vector2(54, 528)
+
+[node name="Captain6" parent="Captains" instance=ExtResource("10_npas6")]
+position = Vector2(54, 628)
+
+[node name="Captain7" parent="Captains" instance=ExtResource("10_npas6")]
+position = Vector2(54, 728)
+
+[node name="Captain8" parent="Captains" instance=ExtResource("10_npas6")]
+position = Vector2(54, 828)
 
 [node name="ObstacleSpawner" type="Node" parent="."]
 script = ExtResource("6_d1o53")
@@ -111,7 +121,7 @@ volume_db = 8.0
 
 [node name="TellTickInverse" type="AudioStreamPlayer" parent="ObstacleSpawner"]
 stream = ExtResource("11_0egy8")
-volume_db = 8.0
+volume_db = 10.0
 
 [node name="MoveTick" type="AudioStreamPlayer" parent="ObstacleSpawner"]
 stream = ExtResource("11_hd8yi")
@@ -119,10 +129,10 @@ volume_db = 8.0
 
 [node name="MoveTickInverse" type="AudioStreamPlayer" parent="ObstacleSpawner"]
 stream = ExtResource("13_86x80")
-volume_db = 8.0
+volume_db = 10.0
 
 [node name="TellSprites" type="Node2D" parent="ObstacleSpawner"]
-position = Vector2(0, 94)
+position = Vector2(114, 14)
 
 [node name="Beat0Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
 position = Vector2(60, 114)
@@ -168,24 +178,7 @@ texture = ExtResource("14_ygw7s")
 
 [node name="Player" parent="." instance=ExtResource("3_22ywp")]
 z_index = 1
-position = Vector2(320, 720)
-
-[node name="Lives" type="Node2D" parent="." groups=["lives"]]
-position = Vector2(580, 900)
-
-[node name="Heart1" type="Sprite2D" parent="Lives"]
-scale = Vector2(2, 2)
-texture = ExtResource("16_we20a")
-
-[node name="Heart2" type="Sprite2D" parent="Lives"]
-position = Vector2(0, -80)
-scale = Vector2(2, 2)
-texture = ExtResource("16_we20a")
-
-[node name="Heart3" type="Sprite2D" parent="Lives"]
-position = Vector2(0, -160)
-scale = Vector2(2, 2)
-texture = ExtResource("16_we20a")
+position = Vector2(420, 720)
 
 [node name="PostProcessing" type="Node" parent="."]
 script = ExtResource("10_geo82")
@@ -252,5 +245,6 @@ theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
 text = "[center]March ruined...
 
-Press Space to play again[/center]"
+Space to play again
+Esc to exit[/center]"
 fit_content = true
