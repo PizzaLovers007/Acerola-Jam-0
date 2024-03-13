@@ -25,6 +25,7 @@ var _dot_img: CompressedTexture2D = preload("res://Sprites/dot.png")
 var _key_up_img: CompressedTexture2D = preload("res://Sprites/right_key_up.png")
 var _key_down_img: CompressedTexture2D = preload("res://Sprites/right_key_down.png")
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	conductor.quarter_passed.connect(_bounce_title)
@@ -102,3 +103,10 @@ func _process(delta: float) -> void:
 		conductor.play()
 	if Input.is_action_just_pressed("ui_accept"):
 		get_tree().change_scene_to_file("res://Scenes/Game.tscn")
+
+
+# TODO: rework tutorial (down down, up up, down fake, down fake)
+# TODO: fix angry butt sprite
+# TODO: maybe redo gaps between patterns (1 gap, 3 gap with 2nd row ants)
+# TODO: redraw player sprite
+
