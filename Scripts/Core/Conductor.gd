@@ -63,7 +63,7 @@ func _process(delta: float) -> void:
 	
 	# Skip processing jitters, but not loops
 	if time_raw < prev_time_raw:
-		if prev_time_raw - time_raw < 0.1:
+		if prev_time_raw - time_raw < 5:
 			return
 		print("big reverse: prev=", prev_time_raw, " curr=", time_raw, " delta=", prev_time_raw - time_raw)
 		loops += 1
