@@ -3,22 +3,34 @@ extends Node
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
+@onready var obstacle_spawner: ObstacleSpawner = get_tree().get_first_node_in_group("spawner")
 @onready var game_over_node: Node = get_tree().get_first_node_in_group("gui")
+@onready var score_text: RichTextLabel = get_tree().get_first_node_in_group("score")
 
 var has_started: bool = false
 var curr_state: GameState = GameState.START
+var _score: int = 0
 
 enum GameState {START, PLAYING, DEAD}
 
 
 func _ready() -> void:
 	player.player_died.connect(_on_player_died)
+	obstacle_spawner.did_tick.connect(_on_tick)
 
 
 func _on_player_died() -> void:
 	conductor.stop()
 	curr_state = GameState.DEAD
+	score_text.visible = false
 	game_over_node.visible = true
+	var game_over_score_text = game_over_node.get_node("Score") as RichTextLabel
+	game_over_score_text.text = "[center]Final score: %d[/center]" % _score
+
+
+func _on_tick() -> void:
+	_score += 1
+	score_text.text = "Score:\n%d" % _score
 
 
 func _process(delta: float) -> void:
