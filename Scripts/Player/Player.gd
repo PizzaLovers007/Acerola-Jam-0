@@ -15,6 +15,7 @@ signal player_died
 @export var column: int = 0
 @export var is_controllable: bool = true
 @export var invuln_time: float = 0
+@export var column_offset: float = 0
 
 var _obstacle_inside: Obstacle = null
 var _entered_obstacle_us: int = 0
@@ -58,21 +59,25 @@ func _process_damage() -> void:
 
 
 func _process_inputs() -> void:
-	if not is_controllable or _move_tween != null:
+	if not is_controllable:
 		return
 		
 	if Input.is_action_just_pressed("ui_left"):
-		column -= 1
+		move(-1)
 	elif Input.is_action_just_pressed("ui_right"):
-		column += 1
-	else:
+		move(1)
+
+
+func move(dir: int) -> void:
+	if _move_tween != null:
 		return
-		
+	
+	column += dir
 	if column < -2 or column > 2:
 		column = clamp(column, -2, 2)
 		return
-		
-	var target_x = Constants.MIDDLE_X + column * Constants.COLUMN_WIDTH
+	
+	var target_x = Constants.MIDDLE_X + column_offset + column * Constants.COLUMN_WIDTH
 	_move_tween = get_tree().create_tween()
 	_move_tween.set_ease(Tween.EASE_OUT)
 	_move_tween.set_trans(Tween.TRANS_QUINT)

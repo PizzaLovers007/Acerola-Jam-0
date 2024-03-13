@@ -31,7 +31,7 @@ func _ready() -> void:
 
 
 func play() -> void:
-	prev_time_raw = -1
+	prev_time_raw = 0
 	curr_beat = 0
 	loops = 0
 	song_length_beats = round(player.stream.get_length() / 60 * bpm)

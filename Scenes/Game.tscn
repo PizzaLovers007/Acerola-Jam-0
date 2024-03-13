@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dcowq5bscbq16"]
+[gd_scene load_steps=27 format=3 uid="uid://dcowq5bscbq16"]
 
 [ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
 [ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
@@ -22,6 +22,7 @@
 [ext_resource type="AudioStream" uid="uid://bc1f4yfidc5i2" path="res://Sounds/Metronomes/Perc_Metal_lo.wav" id="13_86x80"]
 [ext_resource type="Texture2D" uid="uid://dptw7ixoj71cx" path="res://Textures/skew.png" id="14_4ikar"]
 [ext_resource type="Texture2D" uid="uid://xaqv06mtanp8" path="res://Sprites/dot.png" id="14_ygw7s"]
+[ext_resource type="FontFile" uid="uid://cfoaalrw3kscn" path="res://Fonts/m5x7.ttf" id="23_32skm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o32ba"]
 shader = ExtResource("10_hm5qq")
@@ -89,28 +90,28 @@ position = Vector2(580, 1010.72)
 [node name="Captains" type="Node2D" parent="." groups=["captains"]]
 
 [node name="Captain1" parent="Captains" instance=ExtResource("10_npas6")]
-position = Vector2(54, 128)
+position = Vector2(50, 128)
 
 [node name="Captain2" parent="Captains" instance=ExtResource("10_npas6")]
-position = Vector2(54, 228)
+position = Vector2(50, 228)
 
 [node name="Captain3" parent="Captains" instance=ExtResource("10_npas6")]
-position = Vector2(54, 328)
+position = Vector2(50, 328)
 
 [node name="Captain4" parent="Captains" instance=ExtResource("10_npas6")]
-position = Vector2(54, 428)
+position = Vector2(50, 428)
 
 [node name="Captain5" parent="Captains" instance=ExtResource("10_npas6")]
-position = Vector2(54, 528)
+position = Vector2(50, 528)
 
 [node name="Captain6" parent="Captains" instance=ExtResource("10_npas6")]
-position = Vector2(54, 628)
+position = Vector2(50, 628)
 
 [node name="Captain7" parent="Captains" instance=ExtResource("10_npas6")]
-position = Vector2(54, 728)
+position = Vector2(50, 728)
 
 [node name="Captain8" parent="Captains" instance=ExtResource("10_npas6")]
-position = Vector2(54, 828)
+position = Vector2(50, 828)
 
 [node name="ObstacleSpawner" type="Node" parent="."]
 script = ExtResource("6_d1o53")
@@ -132,7 +133,7 @@ stream = ExtResource("13_86x80")
 volume_db = 10.0
 
 [node name="TellSprites" type="Node2D" parent="ObstacleSpawner"]
-position = Vector2(114, 14)
+position = Vector2(110, 14)
 
 [node name="Beat0Tell" type="Sprite2D" parent="ObstacleSpawner/TellSprites"]
 position = Vector2(60, 114)
@@ -241,7 +242,8 @@ offset_right = -30.0
 offset_bottom = 138.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/normal_font_size = 50
+theme_override_fonts/normal_font = ExtResource("23_32skm")
+theme_override_font_sizes/normal_font_size = 80
 bbcode_enabled = true
 text = "[center]March ruined...
 

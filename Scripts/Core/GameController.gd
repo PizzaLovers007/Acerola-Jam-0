@@ -13,14 +13,12 @@ enum GameState {START, PLAYING, DEAD}
 
 func _ready() -> void:
 	player.player_died.connect(_on_player_died)
-	Engine.time_scale = 1
 
 
 func _on_player_died() -> void:
 	conductor.stop()
 	curr_state = GameState.DEAD
 	game_over_node.visible = true
-	Engine.time_scale = 0
 
 
 func _process(delta: float) -> void:
@@ -31,3 +29,5 @@ func _process(delta: float) -> void:
 		GameState.DEAD:
 			if Input.is_action_just_pressed("ui_accept"):
 				get_tree().reload_current_scene()
+			elif Input.is_action_just_pressed("ui_cancel"):
+				get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")

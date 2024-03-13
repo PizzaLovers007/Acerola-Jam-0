@@ -5,8 +5,13 @@ extends Area2D
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var anger_sprite: Sprite2D = $AngerSprite
 
+@export var initial_flip_v = false
+@export var initial_flip_h = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	sprite.flip_v = initial_flip_v
+	sprite.flip_h = initial_flip_h
 	pass # Replace with function body.
 
 
@@ -14,6 +19,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if transform.origin.y > Constants.SCREEN_HEIGHT * 1.5:
 		queue_free()
+
+
+func idle() -> void:
+	sprite.flip_h = not sprite.flip_h
 
 
 func move(inverse: bool = false) -> void:
@@ -25,7 +34,17 @@ func move(inverse: bool = false) -> void:
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(self, "position", target_origin, conductor.get_beat_time() / 4)
-	tween.play() 
+	tween.play()
+
+
+func move_menu(y_amount: float) -> void:
+	var target_y = position.y + y_amount
+	sprite.flip_v = y_amount < 0
+	var tween = get_tree().create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUINT)
+	tween.tween_property(self, "position:y", target_y, conductor.get_beat_time() / 4)
+	tween.play()
 
 
 func show_angry() -> void:
