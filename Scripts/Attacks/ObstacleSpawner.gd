@@ -30,7 +30,9 @@ var _faker_pattern: Array[bool] = [false,false,false,false,false,false,false,fal
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	conductor.eighth_passed.connect(_determine_patterns)
 	conductor.eighth_passed.connect(_spawn_and_move)
+	conductor.eighth_passed.connect(_update_tells)
 	conductor.eighth_passed_without_latency.connect(_schedule_sounds)
 	_move_pattern.resize(8)
 	pass # Replace with function body.
@@ -41,6 +43,33 @@ func _spawn_obstacle(column: int, y_offset: int) -> void:
 	obstacle.transform.origin.y = Y_SPAWN - y_offset * Constants.OBSTACLE_HEIGHT
 	obstacle.transform.origin.x = Constants.MIDDLE_X + column * Constants.COLUMN_WIDTH
 	obstacles_node.add_child(obstacle)
+
+
+func _determine_patterns(beat: int, fract: int) -> void:
+	var measure = beat / 4
+	var beat_norm = beat % 4
+	var half_beat_norm = beat_norm * 2 + fract
+	
+	if measure % 4 == 0 and half_beat_norm == 4:
+		_faker_pattern.fill(false)
+		for captain in captains_node.get_children() as Array[Captain]:
+			captain.is_faker = false
+		var faker_index_bag = [0,1,2,3,4,5,6,7]
+		faker_index_bag.shuffle()
+		var num_faker = randi_range(max(0, measure / 24), min(3, measure / 8))
+		for i in range(0, num_faker):
+			_faker_pattern[faker_index_bag[i]] = true
+			var captain = captains_node.get_child(faker_index_bag[i]) as Captain
+			captain.is_faker = true
+	
+	if measure % 4 == 1 and half_beat_norm == 0:
+		var pattern = [
+			Constants.MOVE_PATTERNS.pick_random(),
+			Constants.MOVE_PATTERNS.pick_random(),
+			Constants.MOVE_INVERSE_PATTERNS.pick_random()
+		].pick_random()
+		for i in range(0, 8):
+			_move_pattern[i] = pattern[i]
 
 
 func _spawn_and_move(beat: int, fract: int) -> void:
@@ -65,67 +94,64 @@ func _spawn_and_move(beat: int, fract: int) -> void:
 				captain.move(100)
 
 
-func _schedule_sounds(beat: int, fract: int) -> void:
+
+func _update_tells(beat: int, fract: int) -> void:
 	var measure = beat / 4
 	var beat_norm = beat % 4
-	if measure % 4 == 1 and beat_norm == 0 and fract == 0:
-		var pattern = [
-			Constants.MOVE_PATTERNS.pick_random(),
-			Constants.MOVE_PATTERNS.pick_random(),
-			Constants.MOVE_INVERSE_PATTERNS.pick_random()
-		].pick_random()
-		for i in range(0, 8):
-			_move_pattern[i] = pattern[i]
-			
 	var half_beat_norm = beat_norm * 2 + fract
+	
 	var tell_sprite = tell_sprites_node.get_child(half_beat_norm) as Sprite2D
 	match measure % 4:
 		2:
 			if _move_pattern[half_beat_norm] == 1:
 				tell_sprite.texture = _down_arrow_img
 				var captain = captains_node.get_child(half_beat_norm) as Captain
-				if captain.is_faker:
-					fake_tick.play()
-				else:
-					tell_tick.play()
 				captain.whistle(false)
 			elif _move_pattern[half_beat_norm] == -1:
 				tell_sprite.texture = _up_arrow_img
 				var captain = captains_node.get_child(half_beat_norm) as Captain
-				if captain.is_faker:
+				captain.whistle(true)
+		3:
+			if _move_pattern[half_beat_norm] == 1:
+				for captain in captains_node.get_children() as Array[Captain]:
+					captain.idle()
+			if _move_pattern[half_beat_norm] == -1:
+				for captain in captains_node.get_children() as Array[Captain]:
+					captain.idle()
+	if measure % 4 == 0 and half_beat_norm == 0:
+		for child in tell_sprites_node.get_children() as Array[Sprite2D]:
+			child.texture = _dot_img
+	
+
+
+func _schedule_sounds(beat: int, fract: int) -> void:
+	var measure = beat / 4
+	var beat_norm = beat % 4
+	var half_beat_norm = beat_norm * 2 + fract
+	
+	match measure % 4:
+		2:
+			if _move_pattern[half_beat_norm] == 1:
+				if _faker_pattern[half_beat_norm]:
+					fake_tick.play()
+				else:
+					tell_tick.play()
+			elif _move_pattern[half_beat_norm] == -1:
+				if _faker_pattern[half_beat_norm]:
 					fake_tick.play()
 				else:
 					tell_tick_inverse.play()
-				captain.whistle(true)
 		3:
 			if _move_pattern[half_beat_norm] == 1:
 				if _faker_pattern[half_beat_norm]:
 					fake_tick_inverse.play()
 				else:
 					move_tick.play()
-				for captain in captains_node.get_children() as Array[Captain]:
-					captain.idle()
 			if _move_pattern[half_beat_norm] == -1:
 				if _faker_pattern[half_beat_norm]:
 					fake_tick_inverse.play()
 				else:
 					move_tick_inverse.play()
-				for captain in captains_node.get_children() as Array[Captain]:
-					captain.idle()
-	if measure % 4 == 0 and half_beat_norm == 0:
-		for child in tell_sprites_node.get_children() as Array[Sprite2D]:
-			child.texture = _dot_img
-	if measure % 4 == 0 and half_beat_norm == 4:
-		_faker_pattern.fill(false)
-		for captain in captains_node.get_children() as Array[Captain]:
-			captain.is_faker = false
-		var faker_index_bag = [0,1,2,3,4,5,6,7]
-		faker_index_bag.shuffle()
-		var num_faker = randi_range(max(0, measure / 24), min(3, measure / 8))
-		for i in range(0, num_faker):
-			_faker_pattern[faker_index_bag[i]] = true
-			var captain = captains_node.get_child(faker_index_bag[i]) as Captain
-			captain.is_faker = true
 
 
 func _tick(inverse: bool = false) -> void:
