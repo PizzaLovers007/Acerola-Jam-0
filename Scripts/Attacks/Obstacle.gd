@@ -51,3 +51,7 @@ func show_angry() -> void:
 	anger_sprite.visible = true
 	anger_sprite.rotation_degrees = 180 if sprite.flip_v else 0
 	sprite.modulate = Color.ORANGE_RED
+
+
+func is_down() -> bool:
+	return not sprite.flip_v

@@ -19,8 +19,10 @@ signal player_died
 
 var _idle_img: CompressedTexture2D = preload("res://Sprites/player_idle.png")
 var _dodge_img: CompressedTexture2D = preload("res://Sprites/player_dodge.png")
+var _dead_img: CompressedTexture2D = preload("res://Sprites/player_dead.png")
 var _obstacle_inside: Obstacle = null
 var _entered_obstacle_us: int = 0
+var _obstacle_dir_down: bool = true
 var _move_tween: Tween = null
 var _next_idle_cutoff: float = -1
 
@@ -57,9 +59,9 @@ func _process_damage() -> void:
 			kill_player.play()
 			invuln_time = 1000
 			is_controllable = false
-			sprite.modulate.a = 0
-			await get_tree().create_timer(5).timeout
-			queue_free()
+			sprite.texture = _dead_img
+			var sign = 1 if _obstacle_dir_down else -1
+			position.y += Constants.OBSTACLE_HEIGHT / 2.0 * sign
 
 
 func _process_inputs() -> void:
@@ -104,8 +106,10 @@ func _idle(beat: int, fract: int) -> void:
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("obstacle"):
 		return
+	var obstacle = area as Obstacle
 	_entered_obstacle_us = Time.get_ticks_usec()
-	_obstacle_inside = area as Obstacle
+	_obstacle_inside = obstacle
+	_obstacle_dir_down = obstacle.is_down()
 
 
 func _on_area_2d_area_exited(area: Area2D) -> void:
