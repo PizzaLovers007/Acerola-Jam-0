@@ -17,13 +17,17 @@ signal player_died
 @export var invuln_time: float = 0
 @export var column_offset: float = 0
 
+var _idle_img: CompressedTexture2D = preload("res://Sprites/player_idle.png")
+var _dodge_img: CompressedTexture2D = preload("res://Sprites/player_dodge.png")
 var _obstacle_inside: Obstacle = null
 var _entered_obstacle_us: int = 0
 var _move_tween: Tween = null
+var _next_idle_cutoff: float = -1
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	conductor.eighth_passed.connect(_idle)
 	pass # Replace with function body.
 
 
@@ -77,6 +81,10 @@ func move(dir: int) -> void:
 		column = clamp(column, -2, 2)
 		return
 	
+	sprite.texture = _dodge_img
+	sprite.flip_h = dir < 0
+	_next_idle_cutoff = conductor.curr_beat + 0.2
+	
 	var target_x = Constants.MIDDLE_X + column_offset + column * Constants.COLUMN_WIDTH
 	_move_tween = get_tree().create_tween()
 	_move_tween.set_ease(Tween.EASE_OUT)
@@ -84,6 +92,13 @@ func move(dir: int) -> void:
 	_move_tween.tween_property(self, "position:x", target_x, conductor.get_beat_time() / 4)
 	_move_tween.tween_callback(func(): _move_tween = null)
 	_move_tween.play()
+
+
+func _idle(beat: int, fract: int) -> void:
+	if beat + fract / 2.0 > _next_idle_cutoff:
+		sprite.texture = _idle_img
+		if fract == 0:
+			sprite.flip_h = not sprite.flip_h
 
 
 func _on_area_2d_area_entered(area: Area2D) -> void:

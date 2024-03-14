@@ -90,17 +90,18 @@ func _move_obstacles(beat: int) -> void:
 
 func _move_player(beat: int, fract: int) -> void:
 	var half_beat = beat * 2 + fract
-	player.move(_PLAYER_MOVES[half_beat % 16])
 	match _PLAYER_MOVES[half_beat % 16]:
 		-1:
 			left_key_sprite.texture = _key_down_img
 			right_key_sprite.texture = _key_up_img
+			player.move(-1)
 		0:
 			left_key_sprite.texture = _key_up_img
 			right_key_sprite.texture = _key_up_img
 		1:
 			left_key_sprite.texture = _key_up_img
 			right_key_sprite.texture = _key_down_img
+			player.move(1)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

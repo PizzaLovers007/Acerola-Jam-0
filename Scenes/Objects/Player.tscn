@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bbuo24wyxqqay"]
 
-[ext_resource type="Texture2D" uid="uid://dmwh22s5lp4bn" path="res://Sprites/player_ship.png" id="1_uvvdc"]
+[ext_resource type="Texture2D" uid="uid://bnfbdtcciqq8l" path="res://Sprites/player_idle.png" id="2_3gdm6"]
 [ext_resource type="AudioStream" uid="uid://cbyb75imslw3t" path="res://Sounds/Hit_Hurt.wav" id="4_0gb6e"]
 [ext_resource type="AudioStream" uid="uid://dwym8a4nu4bc" path="res://Sounds/Hit_Dead.wav" id="4_qv5wy"]
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="4_rcthe"]
@@ -13,7 +13,7 @@ script = ExtResource("4_rcthe")
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(0, -2)
 scale = Vector2(2, 2)
-texture = ExtResource("1_uvvdc")
+texture = ExtResource("2_3gdm6")
 
 [node name="Area2D" type="Area2D" parent="."]
 
