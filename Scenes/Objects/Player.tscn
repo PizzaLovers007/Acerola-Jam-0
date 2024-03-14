@@ -11,7 +11,7 @@
 script = ExtResource("4_rcthe")
 
 [node name="Sprite" type="Sprite2D" parent="."]
-position = Vector2(0, -2)
+position = Vector2(0, 2)
 scale = Vector2(2, 2)
 texture = ExtResource("2_3gdm6")
 
