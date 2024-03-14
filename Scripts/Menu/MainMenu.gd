@@ -7,6 +7,7 @@ const _FAKER_MOVES: Array[int] = [0, 0, 0, 0, 1, 0, -1, 0]
 const _ANT_MOVES: Array[int] = [0, 1, 0, -1, 0, 0, 0, 0]
 
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
+@onready var save_system: SaveSystem = get_tree().get_first_node_in_group("save_system")
 @onready var obstacles_node: Node2D = $MainCanvasLayer/Obstacles
 @onready var captain: Captain = $MainCanvasLayer/Captain
 @onready var captain_tell: Sprite2D = $MainCanvasLayer/Captain/Tell
@@ -18,6 +19,8 @@ const _ANT_MOVES: Array[int] = [0, 1, 0, -1, 0, 0, 0, 0]
 @onready var title_sprite: Sprite2D = $MainCanvasLayer/Title
 @onready var play_text: RichTextLabel = $MainCanvasLayer/PlayText
 @onready var tutorial_text: RichTextLabel = $MainCanvasLayer/TutorialText
+@onready var high_score_text: RichTextLabel = $MainCanvasLayer/HighScoreText
+@onready var volume_slider: HSlider = $MainCanvasLayer/VolumeSlider
 
 var _down_arrow_img: CompressedTexture2D = preload("res://Sprites/down_arrow.png")
 var _up_arrow_img: CompressedTexture2D = preload("res://Sprites/up_arrow.png")
@@ -33,6 +36,9 @@ func _ready() -> void:
 	conductor.quarter_passed.connect(func(beat: int): _animate_text(tutorial_text, beat))
 	conductor.quarter_passed.connect(_move_obstacles)
 	conductor.eighth_passed.connect(_move_player)
+	volume_slider.value_changed.connect(_on_volume_changed)
+	volume_slider.value = save_system.volume
+	high_score_text.text = "[right]High score: %d[/right]" % save_system.high_score
 
 
 func _bounce_title(beat: int) -> void:
@@ -102,6 +108,12 @@ func _move_player(beat: int, fract: int) -> void:
 			left_key_sprite.texture = _key_up_img
 			right_key_sprite.texture = _key_down_img
 			player.move(1)
+
+
+func _on_volume_changed(value: float) -> void:
+	if value == volume_slider.min_value:
+		value = -INF
+	save_system.volume = value
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

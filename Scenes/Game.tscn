@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dcowq5bscbq16"]
+[gd_scene load_steps=30 format=3 uid="uid://dcowq5bscbq16"]
 
 [ext_resource type="Script" path="res://Scripts/Core/GameController.gd" id="1_opfnu"]
 [ext_resource type="Script" path="res://Scripts/Core/Conductor.gd" id="2_pyurn"]
@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://ckjqvm86mmdar" path="res://Sounds/Metronomes/Synth_Square_C_lo.wav" id="6_um2jl"]
 [ext_resource type="AudioStream" uid="uid://bax6aeqwkaurw" path="res://Sounds/Metronomes/Synth_Square_A_hi.wav" id="7_ncv6h"]
 [ext_resource type="Texture2D" uid="uid://bfcbabvpni40r" path="res://Sprites/bg.png" id="8_fxxum"]
+[ext_resource type="Script" path="res://Scripts/Core/SaveSystem.gd" id="8_ru74a"]
 [ext_resource type="AudioStream" uid="uid://co1auagu64wct" path="res://Sounds/Metronomes/Perc_Stick_hi.wav" id="10_eq0ud"]
 [ext_resource type="Script" path="res://Scripts/PostProcessing.gd" id="10_geo82"]
 [ext_resource type="Shader" path="res://Shaders/wavy.gdshader" id="10_hm5qq"]
@@ -64,6 +65,9 @@ volume_db = 6.0
 [node name="8thTick" type="AudioStreamPlayer" parent="System/Metronome"]
 stream = ExtResource("7_ncv6h")
 volume_db = 6.0
+
+[node name="SaveSystem" type="Node" parent="System" groups=["save_system"]]
+script = ExtResource("8_ru74a")
 
 [node name="Background" type="Node2D" parent="."]
 

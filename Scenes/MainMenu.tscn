@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ckdsudceoylqs"]
+[gd_scene load_steps=17 format=3 uid="uid://ckdsudceoylqs"]
 
 [ext_resource type="Script" path="res://Scripts/Menu/MainMenu.gd" id="1_drtum"]
 [ext_resource type="Shader" path="res://Shaders/scroll.gdshader" id="1_k1dvq"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bfcbabvpni40r" path="res://Sprites/bg.png" id="2_vfx04"]
 [ext_resource type="AudioStream" uid="uid://oldf1uf558jr" path="res://Music/track.ogg" id="3_hxxxc"]
 [ext_resource type="Texture2D" uid="uid://gwjf3cyfl43g" path="res://Sprites/title.png" id="4_6urih"]
+[ext_resource type="Script" path="res://Scripts/Core/SaveSystem.gd" id="4_xl3w5"]
 [ext_resource type="PackedScene" uid="uid://dwcks3ags7vri" path="res://Scenes/Objects/Captain.tscn" id="6_y7lse"]
 [ext_resource type="Texture2D" uid="uid://xaqv06mtanp8" path="res://Sprites/dot.png" id="7_cf1j2"]
 [ext_resource type="PackedScene" uid="uid://bygishwmk5d5j" path="res://Scenes/Objects/Column.tscn" id="7_dw4f0"]
@@ -13,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bbuo24wyxqqay" path="res://Scenes/Objects/Player.tscn" id="9_pywtq"]
 [ext_resource type="Texture2D" uid="uid://bof2abmmlcr7r" path="res://Sprites/right_key_up.png" id="11_vnh01"]
 [ext_resource type="FontFile" uid="uid://cfoaalrw3kscn" path="res://Fonts/m5x7.ttf" id="12_our7o"]
+[ext_resource type="Texture2D" uid="uid://cd35nthh0bb3q" path="res://Sprites/volume.png" id="15_ihxy1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pavie"]
 shader = ExtResource("1_k1dvq")
@@ -26,6 +28,9 @@ script = ExtResource("2_jhjwm")
 [node name="Player" type="AudioStreamPlayer" parent="Conductor"]
 stream = ExtResource("3_hxxxc")
 volume_db = -6.0
+
+[node name="SaveSystem" type="Node" parent="." groups=["save_system"]]
+script = ExtResource("4_xl3w5")
 
 [node name="MainCanvasLayer" type="CanvasLayer" parent="."]
 
@@ -113,7 +118,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("11_vnh01")
 
 [node name="Title" type="Sprite2D" parent="MainCanvasLayer"]
-position = Vector2(320, 174)
+position = Vector2(320, 186)
 scale = Vector2(4, 4)
 texture = ExtResource("4_6urih")
 
@@ -124,9 +129,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -320.0
-offset_top = -79.0
+offset_top = -75.0
 offset_right = 320.0
-offset_bottom = -9.0
+offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(320, 35)
@@ -153,3 +158,37 @@ theme_override_fonts/normal_font = ExtResource("12_our7o")
 theme_override_font_sizes/normal_font_size = 60
 bbcode_enabled = true
 text = "[center]How to play:[/center]"
+
+[node name="HighScoreText" type="RichTextLabel" parent="MainCanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -333.0
+offset_top = -471.0
+offset_right = 307.0
+offset_bottom = -411.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(320, 30)
+theme_override_fonts/normal_font = ExtResource("12_our7o")
+theme_override_font_sizes/normal_font_size = 60
+bbcode_enabled = true
+text = "[right]High score: 0[/right]"
+
+[node name="Volume" type="Sprite2D" parent="MainCanvasLayer"]
+position = Vector2(38, 38)
+scale = Vector2(2, 2)
+texture = ExtResource("15_ihxy1")
+
+[node name="VolumeSlider" type="HSlider" parent="MainCanvasLayer"]
+offset_left = 71.0
+offset_top = 19.0
+offset_right = 238.0
+offset_bottom = 58.0
+min_value = -20.0
+max_value = 12.0
+step = 0.1
+value = -6.0
+exp_edit = true
