@@ -10,10 +10,11 @@ config_version=5
 
 [application]
 
-config/name="Acerola Jam 0"
+config/name="March of the Ants"
+config/description="Keep with the beat of the marching ants! Watch the captains for their commands, but be careful, some of them may be phonies..."
 run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Sprites/icon.png"
 
 [display]
 
