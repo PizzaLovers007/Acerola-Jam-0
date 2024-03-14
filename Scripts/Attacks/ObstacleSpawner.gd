@@ -22,7 +22,8 @@ var _down_arrow_img: CompressedTexture2D = preload("res://Sprites/down_arrow.png
 var _up_arrow_img: CompressedTexture2D = preload("res://Sprites/up_arrow.png")
 var _dot_img: CompressedTexture2D = preload("res://Sprites/dot.png")
 var _next_spawn: int = 2
-var _next_pattern: Array = Constants.OBSTACLE_PATTERNS.pick_random()
+var _pattern_spawn_count: int = 0
+var _pattern_bag: Array = Constants.EASY_OBSTACLE_PATTERNS.duplicate()
 var _move_pattern: Array[int] = [1,0,1,0,1,0,1,0]
 var _faker_pattern: Array[bool] = [false,false,false,false,false,false,false,false]
 
@@ -120,7 +121,7 @@ func _schedule_sounds(beat: int, fract: int) -> void:
 			captain.is_faker = false
 		var faker_index_bag = [0,1,2,3,4,5,6,7]
 		faker_index_bag.shuffle()
-		var num_faker = randi_range(0, min(3, measure / 8))
+		var num_faker = randi_range(max(0, measure / 24), min(3, measure / 8))
 		for i in range(0, num_faker):
 			_faker_pattern[faker_index_bag[i]] = true
 			var captain = captains_node.get_child(faker_index_bag[i]) as Captain
@@ -141,12 +142,24 @@ func _handle_spawning(inverse: bool = false) -> void:
 	if _next_spawn > 0:
 		_next_spawn -= 1
 		return
-	var pattern = _next_pattern
+	var pattern = _pattern_bag.pick_random()
 	for i in range(0, pattern.size()):
 		var row = pattern[pattern.size()-i-1]
 		for c in range(-2, 3):
 			if (row >> (2-c)) % 2 == 1:
 				_spawn_obstacle(c, i)
-				
-	_next_pattern = Constants.OBSTACLE_PATTERNS.pick_random()
-	_next_spawn += pattern.size() + randi_range(0, 2)
+	
+	var gap_size = randi_range(0, 2)
+	if gap_size == 2:
+		var c_gap = randi_range(-1, 1)
+		for c in range(-2, 3):
+			if c_gap != c:
+				_spawn_obstacle(c, pattern.size()+1)
+	
+	_next_spawn += pattern.size() + gap_size
+	
+	_pattern_spawn_count += 1
+	if _pattern_spawn_count == 3:
+		_pattern_bag.append_array(Constants.MEDIUM_OBSTACLE_PATTERNS)
+	if _pattern_spawn_count == 7:
+		_pattern_bag.append_array(Constants.HARD_OBSTACLE_PATTERNS)

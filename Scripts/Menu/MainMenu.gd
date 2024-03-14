@@ -105,6 +105,5 @@ func _process(delta: float) -> void:
 		get_tree().change_scene_to_file("res://Scenes/Game.tscn")
 
 
-# TODO: maybe redo gaps between patterns (1 gap, 3 gap with 2nd row ants)
 # TODO: redraw player sprite
 
