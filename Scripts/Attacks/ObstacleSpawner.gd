@@ -56,7 +56,7 @@ func _determine_patterns(beat: int, fract: int) -> void:
 			captain.is_faker = false
 		var faker_index_bag = [0,1,2,3,4,5,6,7]
 		faker_index_bag.shuffle()
-		var num_faker = randi_range(max(0, measure / 24), min(3, measure / 8))
+		var num_faker = randi_range(max(0, measure / 12), min(3, measure / 8))
 		for i in range(0, num_faker):
 			_faker_pattern[faker_index_bag[i]] = true
 			var captain = captains_node.get_child(faker_index_bag[i]) as Captain
