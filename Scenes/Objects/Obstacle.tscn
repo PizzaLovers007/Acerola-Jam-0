@@ -19,6 +19,6 @@ shape = SubResource("CircleShape2D_vvec0")
 
 [node name="AngerSprite" type="Sprite2D" parent="."]
 visible = false
-position = Vector2(-12, 21)
 scale = Vector2(2, 2)
 texture = ExtResource("3_02myk")
+offset = Vector2(-5.5, 10.5)

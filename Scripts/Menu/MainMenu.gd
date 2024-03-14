@@ -105,8 +105,6 @@ func _process(delta: float) -> void:
 		get_tree().change_scene_to_file("res://Scenes/Game.tscn")
 
 
-# TODO: rework tutorial (down down, up up, down fake, down fake)
-# TODO: fix angry butt sprite
 # TODO: maybe redo gaps between patterns (1 gap, 3 gap with 2nd row ants)
 # TODO: redraw player sprite
 
