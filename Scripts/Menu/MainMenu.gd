@@ -1,10 +1,10 @@
 class_name MainMenu
 extends Node
 
-const _PLAYER_MOVES: Array[int] = [1, 0, -1, 0, 0, 0, 0, 0]
+const _PLAYER_MOVES: Array[int] = [0, 0, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 const _CAPTAIN_MOVES: Array[int] = [1, 0, -1, 0, 0, 0, 0, 0]
 const _FAKER_MOVES: Array[int] = [0, 0, 0, 0, 1, 0, -1, 0]
-const _ANT_MOVES: Array[int] = [1, 0, -1, 0, 0, 0, 0, 0]
+const _ANT_MOVES: Array[int] = [0, 1, 0, -1, 0, 0, 0, 0]
 
 @onready var conductor: Conductor = get_tree().get_first_node_in_group("conductor")
 @onready var obstacles_node: Node2D = $MainCanvasLayer/Obstacles
@@ -32,6 +32,7 @@ func _ready() -> void:
 	conductor.quarter_passed.connect(func(beat: int): _animate_text(play_text, beat))
 	conductor.quarter_passed.connect(func(beat: int): _animate_text(tutorial_text, beat))
 	conductor.quarter_passed.connect(_move_obstacles)
+	conductor.eighth_passed.connect(_move_player)
 
 
 func _bounce_title(beat: int) -> void:
@@ -84,8 +85,13 @@ func _move_obstacles(beat: int) -> void:
 		1:
 			for ant in obstacles_node.get_children() as Array[Obstacle]:
 				ant.move_menu(90)
-	player.move(_PLAYER_MOVES[beat % 8])
-	match _PLAYER_MOVES[beat % 8]:
+
+
+
+func _move_player(beat: int, fract: int) -> void:
+	var half_beat = beat * 2 + fract
+	player.move(_PLAYER_MOVES[half_beat % 16])
+	match _PLAYER_MOVES[half_beat % 16]:
 		-1:
 			left_key_sprite.texture = _key_down_img
 			right_key_sprite.texture = _key_up_img
