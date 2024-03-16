@@ -33,7 +33,7 @@ func _ready() -> void:
 	conductor.eighth_passed.connect(_determine_patterns)
 	conductor.eighth_passed.connect(_spawn_and_move)
 	conductor.eighth_passed.connect(_update_tells)
-	conductor.eighth_passed_without_latency.connect(_schedule_sounds)
+	conductor.eighth_will_pass.connect(_schedule_sounds)
 	_move_pattern.resize(8)
 	pass # Replace with function body.
 

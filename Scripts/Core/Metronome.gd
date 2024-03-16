@@ -8,8 +8,8 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	conductor.quarter_passed_without_latency.connect(_on_beat_passed)
-	conductor.eighth_passed_without_latency.connect(_on_eighth_passed)
+	conductor.quarter_will_pass.connect(_on_beat_passed)
+	conductor.eighth_will_pass.connect(_on_eighth_passed)
 	pass # Replace with function body.
 
 
