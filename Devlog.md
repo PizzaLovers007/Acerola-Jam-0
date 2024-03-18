@@ -52,21 +52,21 @@ var _prev_time_seconds: float
 signal quarter_passed(beat: int)
 
 func _process(delta: float) -> void:
-	var time_seconds = $Player.get_playback_position() + AudioServer.get_time_since_last_mix() - AudioServer.get_output_latency()
+    var time_seconds = $Player.get_playback_position() + AudioServer.get_time_since_last_mix() - AudioServer.get_output_latency()
 
-	# Validation
-	if not _is_valid_update(time_seconds):
-		return
+    # Validation
+    if not _is_valid_update(time_seconds):
+        return
 
-	var beat = time_seconds / 60 * bpm
-	var prev_beat = _prev_time_seconds / 60 * bpm
+    var beat = time_seconds / 60 * bpm
+    var prev_beat = _prev_time_seconds / 60 * bpm
 
-	if floor(beat) > floor(prev_beat):
-		# Beat happened this frame!
-		quarter_passed.emit(floor(beat))
+    if floor(beat) > floor(prev_beat):
+        # Beat happened this frame!
+        quarter_passed.emit(floor(beat))
 
-	# Keep track of the previous frame's time
-	_prev_time_seconds = time_seconds
+    # Keep track of the previous frame's time
+    _prev_time_seconds = time_seconds
 ```
 
 With this done, I could connect my ant movement logic to the quarter_passed signal!
@@ -75,11 +75,11 @@ You may be asking, why do you need to check if an update is valid? Due to how th
 
 ```gdscript
 func _is_valid_update(time_seconds: float) -> bool:
-	return (
-		# No weird web issue
-		time_seconds < 1000 and
-		# Time moved forward
-		time_seconds > _prev_time_seconds)
+    return (
+        # No weird web issue
+        time_seconds < 1000 and
+        # Time moved forward
+        time_seconds > _prev_time_seconds)
 ```
 
 It's important to note that the quarter_passed signal doesn't happen exactly on the beat. Signals can only be emitted on frame updates, so some amount of deviation is expected. Having a high framerate makes this better. For my game, this deviation was ok, but if you are writing a game where even this deviation needs to be known, you can adjust the quarter_passed signal to take the non-truncated beat.
@@ -93,35 +93,35 @@ var _loops: int = 0
 var _num_beats_in_song: int = round($Player.stream.get_length() / 60 * bpm)
 
 func _process(delta: float) -> void:
-	# ...calculate/validate time_seconds
+    # ...calculate/validate time_seconds
 
-	if time_seconds - _prev_time_seconds < -5:
-		# Loop happened!
-		_loops += 1
-		# Make prev time on the same "loop" as the curr time. It's not
-		# recommended to use song length directly as there can be small
-		# inaccuracies with audio looping and the song itself
-		_prev_time_seconds -= num_beats_in_song / bpm * 60
+    if time_seconds - _prev_time_seconds < -5:
+        # Loop happened!
+        _loops += 1
+        # Make prev time on the same "loop" as the curr time. It's not
+        # recommended to use song length directly as there can be small
+        # inaccuracies with audio looping and the song itself
+        _prev_time_seconds -= num_beats_in_song / bpm * 60
 
-	var beat = time_seconds / 60 * bpm
-	var prev_beat = _prev_time_seconds / 60 * bpm
+    var beat = time_seconds / 60 * bpm
+    var prev_beat = _prev_time_seconds / 60 * bpm
 
-	# Now add additional beats from previous loops
-	beat += _loops * num_beats_in_song
-	prev_beat += _loops * num_beats_in_song
+    # Now add additional beats from previous loops
+    beat += _loops * num_beats_in_song
+    prev_beat += _loops * num_beats_in_song
 
-	# And do the rest as usual...
+    # And do the rest as usual...
 
 
 # Validation needs to change as well
 func _is_valid_update(time_seconds: float) -> bool:
-	return (
-		# No weird web issue
-		time_seconds < 1000 and (
-			# Time moved forward
-			time_seconds > _prev_time_seconds or
-			# Loop happened
-			time_seconds - _prev_time_seconds < -5))
+    return (
+        # No weird web issue
+        time_seconds < 1000 and (
+            # Time moved forward
+            time_seconds > _prev_time_seconds or
+            # Loop happened
+            time_seconds - _prev_time_seconds < -5))
 ```
 
 ## "Scheduling" sounds
@@ -136,21 +136,21 @@ Instead of checking if a beat happens *now*, I checked if a beat happens in the 
 signal quarter_will_pass(beat: int)
 
 func _process(delta: float) -> void:
-	# ...calculate/validate time_seconds
+    # ...calculate/validate time_seconds
 
-	# ...emit quarter_passed signal
+    # ...emit quarter_passed signal
 
-	# Now adjust the time to be in the future
-	var latency_in_beats = AudioServer.get_output_latency() / 60 * bpm
-	beat += latency_in_beats
-	prev_beat += latency_in_beats
-	
-	if floor(beat) > floor(prev_beat):
-		# Beat will happen soon!
-		quarter_will_pass.emit(floor(beat))
-	
-	# Keep track of the previous frame's time
-	_prev_time_seconds = time_seconds
+    # Now adjust the time to be in the future
+    var latency_in_beats = AudioServer.get_output_latency() / 60 * bpm
+    beat += latency_in_beats
+    prev_beat += latency_in_beats
+    
+    if floor(beat) > floor(prev_beat):
+        # Beat will happen soon!
+        quarter_will_pass.emit(floor(beat))
+    
+    # Keep track of the previous frame's time
+    _prev_time_seconds = time_seconds
 ```
 
 I used this to schedule both the backing metronome as well as the other tick sounds indicating how the ants will move/are moving. Here's a small snippet of the backing metronome:
@@ -162,14 +162,14 @@ I used this to schedule both the backing metronome as well as the other tick sou
 
 
 func _ready() -> void:
-	conductor.quarter_will_pass.connect(_on_beat_passed)
+    conductor.quarter_will_pass.connect(_on_beat_passed)
 
 
 func _on_beat_passed(beat: int) -> void:
-	if beat % 4 == 0:
-		hi_tick_player.play()
-	else:
-		lo_tick_player.play()
+    if beat % 4 == 0:
+        hi_tick_player.play()
+    else:
+        lo_tick_player.play()
 ```
 
 Again, having a higher framerate will result in more accurate sounds, but 100% accuracy will always be impossible. Due to the nature of Godot's audio chunking, sounds can only be played at 15ms intervals (by default), and calling Player.play() schedules the sound to be played at the next mix. My approach schedules the sound to be played on the mix just after the true beat time. However, you can technically look further into the future with [AudioServer.get_time_to_next_mix()](https://docs.godotengine.org/en/stable/classes/class_audioserver.html#class-audioserver-method-get-time-to-next-mix) to ensure sounds start on the mix just before the true beat time.
