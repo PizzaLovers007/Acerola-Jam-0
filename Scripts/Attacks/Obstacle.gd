@@ -8,10 +8,14 @@ extends Area2D
 @export var initial_flip_v = false
 @export var initial_flip_h = false
 
+var _tween_instance: TweenManager.TweenInstance
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	sprite.flip_v = initial_flip_v
 	sprite.flip_h = initial_flip_h
+	_tween_instance = TweenManager.create_instance(self)
 	pass # Replace with function body.
 
 
@@ -28,9 +32,10 @@ func idle() -> void:
 func move(inverse: bool = false) -> void:
 	sprite.flip_v = inverse
 	sprite.flip_h = not sprite.flip_h
+	
+	var tween = _tween_instance.create_tween("move")
 	var move_vector = Constants.OBSTACLE_HEIGHT * Vector2.DOWN * (-1 if inverse else 1)
 	var target_origin = transform.origin + move_vector
-	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(self, "position", target_origin, conductor.get_beat_time() / 4)
@@ -38,9 +43,10 @@ func move(inverse: bool = false) -> void:
 
 
 func move_menu(y_amount: float) -> void:
-	var target_y = position.y + y_amount
 	sprite.flip_v = y_amount < 0
-	var tween = get_tree().create_tween()
+	
+	var tween = _tween_instance.create_tween("move")
+	var target_y = position.y + y_amount
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(self, "position:y", target_y, conductor.get_beat_time() / 4)

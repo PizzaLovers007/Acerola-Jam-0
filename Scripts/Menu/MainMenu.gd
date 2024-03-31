@@ -28,13 +28,16 @@ var _up_arrow_img: CompressedTexture2D = preload("res://Sprites/up_arrow.png")
 var _dot_img: CompressedTexture2D = preload("res://Sprites/dot.png")
 var _key_up_img: CompressedTexture2D = preload("res://Sprites/right_key_up.png")
 var _key_down_img: CompressedTexture2D = preload("res://Sprites/right_key_down.png")
+var _tween_instance: TweenManager.TweenInstance
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	conductor.quarter_passed.connect(_bounce_title)
-	conductor.quarter_passed.connect(func(beat: int): _animate_text(play_text, beat))
-	conductor.quarter_passed.connect(func(beat: int): _animate_text(tutorial_text, beat))
+	conductor.quarter_passed.connect(
+		func(beat: int): _animate_text(play_text, beat, "play_text_scale"))
+	conductor.quarter_passed.connect(
+		func(beat: int): _animate_text(tutorial_text, beat, "tut_text_scale"))
 	conductor.quarter_passed.connect(_move_obstacles)
 	conductor.eighth_passed.connect(_move_player)
 	volume_slider.value_changed.connect(_on_volume_changed)
@@ -42,21 +45,22 @@ func _ready() -> void:
 	visual_delay_slider.value_changed.connect(_on_visual_delay_changed)
 	visual_delay_slider.value = save_system.visual_delay
 	high_score_text.text = "[right]High score: %d[/right]" % save_system.high_score
+	_tween_instance = TweenManager.create_instance(self)
 
 
 func _bounce_title(beat: int) -> void:
+	var tween = _tween_instance.create_tween("title_move")
 	var sign = 1 if beat % 2 == 0 else -1
 	var target_origin = title_sprite.position + Vector2.DOWN * 30 * sign
-	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(title_sprite, "position", target_origin, conductor.get_beat_time() / 4)
 	tween.play()
 
 
-func _animate_text(text: RichTextLabel, beat: int) -> void:
+func _animate_text(text: RichTextLabel, beat: int, tween_id: String) -> void:
+	var tween = _tween_instance.create_tween(tween_id)
 	var target_scale = 1.1 if beat % 2 == 0 else 1
-	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUINT)
 	tween.tween_property(text, "scale", Vector2.ONE * target_scale, conductor.get_beat_time() / 4)

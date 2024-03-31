@@ -29,6 +29,41 @@ var _cached_latency = AudioServer.get_output_latency()
 var _num_beats_in_song: int = 0
 var _prev_time_seconds: float = 0
 var _loops: int = 0
+var _quarter_passed_incrementor: BeatIncrementor = BeatIncrementor.new(quarter_passed)
+var _eighth_passed_incrementor: BeatIncrementor = BeatIncrementor.new(eighth_passed, 2)
+var _twelth_passed_incrementor: BeatIncrementor = BeatIncrementor.new(twelth_passed, 3)
+var _sixteenth_passed_incrementor: BeatIncrementor = BeatIncrementor.new(sixteenth_passed, 4)
+var _quarter_will_pass_incrementor: BeatIncrementor = BeatIncrementor.new(quarter_will_pass)
+var _eighth_will_pass_incrementor: BeatIncrementor = BeatIncrementor.new(eighth_will_pass, 2)
+var _twelth_will_pass_incrementor: BeatIncrementor = BeatIncrementor.new(twelth_will_pass, 3)
+var _sixteenth_will_pass_incrementor: BeatIncrementor = BeatIncrementor.new(sixteenth_will_pass, 4)
+
+
+class BeatIncrementor:
+	var _fract_mod: int
+	var _signal: Signal
+	var _last_beat: int = -1
+	var _last_fract: int
+	
+	
+	func _init(sig: Signal, fract_mod: int = 1):
+		_fract_mod = fract_mod
+		_signal = sig
+		_last_fract = fract_mod - 1
+	
+	
+	func increment_to(beat: int, fract: int = 0):
+		while beat > _last_beat or fract > _last_fract:
+			_last_fract += 1
+			if _last_fract == _fract_mod:
+				_last_beat += 1
+				_last_fract = 0
+			
+			if _fract_mod == 1:
+				_signal.emit(_last_beat)
+			else:
+				_signal.emit(_last_beat, _last_fract)
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -36,8 +71,8 @@ func _ready() -> void:
 
 
 func play() -> void:
-	_prev_time_seconds = 0
-	curr_beat = 0
+	_prev_time_seconds = -_cached_latency - 0.001
+	curr_beat = _prev_time_seconds / 60 * bpm
 	_loops = 0
 	_num_beats_in_song = round(player.stream.get_length() / 60 * bpm)
 	player.play()
@@ -91,13 +126,13 @@ func _process(delta: float) -> void:
 	# Signal the beats that are happening (with offset)
 	curr_beat = beat
 	if floor(beat) > floor(prev_beat):
-		quarter_passed.emit(floor(beat))
+		_quarter_passed_incrementor.increment_to(floor(beat))
 	if floor(beat*2) > floor(prev_beat*2):
-		eighth_passed.emit(floor(beat), floor((beat - floor(beat)) * 2))
+		_eighth_passed_incrementor.increment_to(floor(beat), floor((beat - floor(beat)) * 2))
 	if floor(beat*3) > floor(prev_beat*3):
-		twelth_passed.emit(floor(beat), floor((beat - floor(beat)) * 3))
+		_twelth_passed_incrementor.increment_to(floor(beat), floor((beat - floor(beat)) * 3))
 	if floor(beat*4) > floor(prev_beat*4):
-		sixteenth_passed.emit(floor(beat), floor((beat - floor(beat)) * 4))
+		_sixteenth_passed_incrementor.increment_to(floor(beat), floor((beat - floor(beat)) * 4))
 	
 	# Unapply visual beat offset
 	beat += visual_offset_ms / 60000.0 * bpm
@@ -111,13 +146,13 @@ func _process(delta: float) -> void:
 	# Signal the beats that will happen soon
 	curr_beat_without_latency = beat
 	if floor(beat) > floor(prev_beat):
-		quarter_will_pass.emit(floor(beat))
+		_quarter_will_pass_incrementor.increment_to(floor(beat))
 	if floor(beat*2) > floor(prev_beat*2):
-		eighth_will_pass.emit(floor(beat), floor((beat - floor(beat)) * 2))
+		_eighth_will_pass_incrementor.increment_to(floor(beat), floor((beat - floor(beat)) * 2))
 	if floor(beat*3) > floor(prev_beat*3):
-		twelth_will_pass.emit(floor(beat), floor((beat - floor(beat)) * 3))
+		_twelth_will_pass_incrementor.increment_to(floor(beat), floor((beat - floor(beat)) * 3))
 	if floor(beat*4) > floor(prev_beat*4):
-		sixteenth_will_pass.emit(floor(beat), floor((beat - floor(beat)) * 4))
+		_sixteenth_will_pass_incrementor.increment_to(floor(beat), floor((beat - floor(beat)) * 4))
 	
 	# Keep track of the previous frame's time
 	_prev_time_seconds = time_seconds

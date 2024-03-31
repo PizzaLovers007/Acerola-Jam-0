@@ -119,7 +119,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("11_vnh01")
 
 [node name="Title" type="Sprite2D" parent="MainCanvasLayer"]
-position = Vector2(320, 268)
+position = Vector2(320, 247)
 scale = Vector2(4, 4)
 texture = ExtResource("4_6urih")
 

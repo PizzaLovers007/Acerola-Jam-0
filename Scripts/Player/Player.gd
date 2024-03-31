@@ -23,13 +23,15 @@ var _dead_img: CompressedTexture2D = preload("res://Sprites/player_dead.png")
 var _obstacle_inside: Obstacle = null
 var _entered_obstacle_us: int = 0
 var _obstacle_dir_down: bool = true
-var _move_tween: Tween = null
+var _is_moving: bool = false
 var _next_idle_cutoff: float = -1
+var _tween_instance: TweenManager.TweenInstance
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	conductor.eighth_passed.connect(_idle)
+	_tween_instance = TweenManager.create_instance(self)
 	pass # Replace with function body.
 
 
@@ -75,7 +77,7 @@ func _process_inputs() -> void:
 
 
 func move(dir: int) -> void:
-	if _move_tween != null:
+	if _is_moving:
 		return
 	
 	column += dir
@@ -87,13 +89,14 @@ func move(dir: int) -> void:
 	sprite.flip_h = dir < 0
 	_next_idle_cutoff = conductor.curr_beat + 0.2
 	
+	var tween = _tween_instance.create_tween("move")
 	var target_x = Constants.MIDDLE_X + column_offset + column * Constants.COLUMN_WIDTH
-	_move_tween = get_tree().create_tween()
-	_move_tween.set_ease(Tween.EASE_OUT)
-	_move_tween.set_trans(Tween.TRANS_QUINT)
-	_move_tween.tween_property(self, "position:x", target_x, conductor.get_beat_time() / 4)
-	_move_tween.tween_callback(func(): _move_tween = null)
-	_move_tween.play()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUINT)
+	tween.tween_property(self, "position:x", target_x, conductor.get_beat_time() / 4)
+	tween.tween_callback(func(): _is_moving = false)
+	tween.play()
+	_is_moving = true
 
 
 func _idle(beat: int, fract: int) -> void:
