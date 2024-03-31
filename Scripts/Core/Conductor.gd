@@ -18,6 +18,8 @@ signal sixteenth_will_pass(beat: int, fract: int)
 @export var curr_beat_without_latency: float = 0
 @export var bpm: float = 130
 @export var is_playing: bool = false
+@export var audio_offset_ms: int = 0
+@export var visual_offset_ms: int = 0
 
 @onready var player: AudioStreamPlayer = $Player
 
@@ -59,7 +61,8 @@ func _process(delta: float) -> void:
 	var time_seconds = (
 			player.get_playback_position()
 			+ AudioServer.get_time_since_last_mix()
-			- _cached_latency)
+			- _cached_latency
+			- audio_offset_ms / 1000.0)
 	
 	# Validation
 	if not _is_valid_update(time_seconds):
@@ -81,7 +84,11 @@ func _process(delta: float) -> void:
 	beat += _loops * _num_beats_in_song
 	prev_beat += _loops * _num_beats_in_song
 	
-	# Signal the beats that are happening
+	# Apply visual beat offset
+	beat -= visual_offset_ms / 60000.0 * bpm
+	prev_beat -= visual_offset_ms / 60000.0 * bpm
+	
+	# Signal the beats that are happening (with offset)
 	curr_beat = beat
 	if floor(beat) > floor(prev_beat):
 		quarter_passed.emit(floor(beat))
@@ -91,6 +98,10 @@ func _process(delta: float) -> void:
 		twelth_passed.emit(floor(beat), floor((beat - floor(beat)) * 3))
 	if floor(beat*4) > floor(prev_beat*4):
 		sixteenth_passed.emit(floor(beat), floor((beat - floor(beat)) * 4))
+	
+	# Unapply visual beat offset
+	beat += visual_offset_ms / 60000.0 * bpm
+	prev_beat += visual_offset_ms / 60000.0 * bpm
 	
 	# Now adjust the time to be in the future
 	var latency_in_beats = _cached_latency / 60 * bpm
