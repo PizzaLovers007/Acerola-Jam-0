@@ -21,6 +21,7 @@ const _ANT_MOVES: Array[int] = [0, 1, 0, -1, 0, 0, 0, 0]
 @onready var tutorial_text: RichTextLabel = $MainCanvasLayer/TutorialText
 @onready var high_score_text: RichTextLabel = $MainCanvasLayer/HighScoreText
 @onready var volume_slider: HSlider = $MainCanvasLayer/VolumeSlider
+@onready var visual_delay_slider: HSlider = $MainCanvasLayer/VisualDelaySlider
 
 var _down_arrow_img: CompressedTexture2D = preload("res://Sprites/down_arrow.png")
 var _up_arrow_img: CompressedTexture2D = preload("res://Sprites/up_arrow.png")
@@ -38,6 +39,8 @@ func _ready() -> void:
 	conductor.eighth_passed.connect(_move_player)
 	volume_slider.value_changed.connect(_on_volume_changed)
 	volume_slider.value = save_system.volume
+	visual_delay_slider.value_changed.connect(_on_visual_delay_changed)
+	visual_delay_slider.value = save_system.visual_delay
 	high_score_text.text = "[right]High score: %d[/right]" % save_system.high_score
 
 
@@ -114,6 +117,11 @@ func _on_volume_changed(value: float) -> void:
 	if value == volume_slider.min_value:
 		value = -INF
 	save_system.volume = value
+
+
+func _on_visual_delay_changed(value: float) -> void:
+	save_system.visual_delay = value
+	conductor.visual_offset_ms = value
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

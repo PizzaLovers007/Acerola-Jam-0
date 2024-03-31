@@ -41,6 +41,7 @@ func _on_tick() -> void:
 func _process(delta: float) -> void:
 	match curr_state:
 		GameState.START:
+			conductor.visual_offset_ms = save_system.visual_delay
 			conductor.play()
 			curr_state = GameState.PLAYING
 		GameState.DEAD:

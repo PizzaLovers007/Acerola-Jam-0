@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://ckdsudceoylqs"]
+[gd_scene load_steps=18 format=3 uid="uid://ckdsudceoylqs"]
 
 [ext_resource type="Script" path="res://Scripts/Menu/MainMenu.gd" id="1_drtum"]
 [ext_resource type="Shader" path="res://Shaders/scroll.gdshader" id="1_k1dvq"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://bof2abmmlcr7r" path="res://Sprites/right_key_up.png" id="11_vnh01"]
 [ext_resource type="FontFile" uid="uid://cfoaalrw3kscn" path="res://Fonts/m5x7.ttf" id="12_our7o"]
 [ext_resource type="Texture2D" uid="uid://cd35nthh0bb3q" path="res://Sprites/volume.png" id="15_ihxy1"]
+[ext_resource type="Texture2D" uid="uid://b52kw5x08dysk" path="res://Sprites/visual_delay.png" id="16_b1347"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pavie"]
 shader = ExtResource("1_k1dvq")
@@ -118,7 +119,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("11_vnh01")
 
 [node name="Title" type="Sprite2D" parent="MainCanvasLayer"]
-position = Vector2(320, 212)
+position = Vector2(320, 268)
 scale = Vector2(4, 4)
 texture = ExtResource("4_6urih")
 
@@ -129,9 +130,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -320.0
-offset_top = -75.0
+offset_top = -51.0
 offset_right = 320.0
-offset_bottom = -5.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(320, 35)
@@ -166,9 +167,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -333.0
-offset_top = -471.0
+offset_top = -447.0
 offset_right = 307.0
-offset_bottom = -411.0
+offset_bottom = -387.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(320, 30)
@@ -191,3 +192,16 @@ min_value = -20.0
 max_value = 12.0
 step = 0.1
 value = -6.0
+
+[node name="VisualDelay" type="Sprite2D" parent="MainCanvasLayer"]
+position = Vector2(38, 91)
+scale = Vector2(2, 2)
+texture = ExtResource("16_b1347")
+
+[node name="VisualDelaySlider" type="HSlider" parent="MainCanvasLayer"]
+offset_left = 71.0
+offset_top = 70.0
+offset_right = 238.0
+offset_bottom = 109.0
+max_value = 250.0
+step = 5.0

@@ -8,7 +8,11 @@ static var high_score: int = 0:
 static var volume: float = -6:
 	set(value):
 		volume = value
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), volume)
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), value)
+		_mark_dirty()
+static var visual_delay: int = 0:
+	set(value):
+		visual_delay = value
 		_mark_dirty()
 
 static var _unsaved_values: bool = false
@@ -22,7 +26,8 @@ static func _static_init() -> void:
 		return
 	high_score = file.get_32()
 	volume = file.get_float()
-	print("loaded! high_score=", high_score, " volume=", volume)
+	visual_delay = file.get_32()
+	print("loaded! high_score=", high_score, " volume=", volume, " visual_delay=", visual_delay)
 
 
 func _process(delta: float) -> void:
@@ -42,6 +47,7 @@ static func _save_changes() -> void:
 	var file = FileAccess.open("user://save.dat", FileAccess.WRITE)
 	file.store_32(high_score)
 	file.store_float(volume)
+	file.store_32(visual_delay)
 	_unsaved_values = false
 	print("saved!")
 
